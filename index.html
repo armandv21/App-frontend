@@ -492,18 +492,18 @@ async function runOptimization() {
   document.getElementById('btnRun').disabled = true;
   setLoading('Envoi de la requête au serveur…');
 
-  const fetchWithRetry = async (url, options, retries = 3) => {
+  const fetchWithRetry = async (url, options, retries = 5) => {
     for (let i = 0; i < retries; i++) {
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 120000);
+        const timeoutId = setTimeout(() => controller.abort(), 300000);
         const resp = await fetch(url, { ...options, signal: controller.signal });
         clearTimeout(timeoutId);
         return resp;
       } catch (err) {
         if (i === retries - 1) throw err;
         setLoading(`Serveur en démarrage, nouvelle tentative (${i + 2}/${retries})…`);
-        await new Promise(r => setTimeout(r, 5000));
+        await new Promise(r => setTimeout(r, 8000));
       }
     }
   };
