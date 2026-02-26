@@ -354,7 +354,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:13px;height:13px;b
 <script>
 // ── Config ────────────────────────────────────────────────────────────────────
 // Remplacez cette URL par l'URL de votre backend Render après déploiement
-const API_URL = 'https://app-backend-k9i5.onrender.com';
+const API_URL = 'https://VOTRE-APP.onrender.com';
 
 // ── Asset list ────────────────────────────────────────────────────────────────
 const ASSETS = {
@@ -492,8 +492,24 @@ async function runOptimization() {
   document.getElementById('btnRun').disabled = true;
   setLoading('Envoi de la requête au serveur…');
 
+  const fetchWithRetry = async (url, options, retries = 3) => {
+    for (let i = 0; i < retries; i++) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 120000);
+        const resp = await fetch(url, { ...options, signal: controller.signal });
+        clearTimeout(timeoutId);
+        return resp;
+      } catch (err) {
+        if (i === retries - 1) throw err;
+        setLoading(`Serveur en démarrage, nouvelle tentative (${i + 2}/${retries})…`);
+        await new Promise(r => setTimeout(r, 5000));
+      }
+    }
+  };
+
   try {
-    const resp = await fetch(`${API_URL}/optimize`, {
+    const resp = await fetchWithRetry(`${API_URL}/optimize`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
