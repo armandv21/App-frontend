@@ -8,173 +8,313 @@
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --bg:#f4f1eb;--surface:#faf8f4;--surface2:#ede9e1;--surface3:#e4dfd5;
-  --border:#d4cfc5;--border2:#c4bdb0;--ink:#1a1714;--ink2:#3d3830;
-  --muted:#8a8278;--muted2:#b0a99f;--blue:#1e3a5f;--blue-lt:#3466a0;
-  --teal:#1a5c52;--teal-lt:#2d8a7a;--amber:#8a5a00;--amber-lt:#c4820a;
-  --rose:#7a1f2e;--rose-lt:#b03045;
-  --font-serif:'Libre Baskerville',Georgia,serif;
-  --font-sans:'DM Sans',system-ui,sans-serif;
+  --bg:       #f4f1eb;
+  --surface:  #faf8f4;
+  --surface2: #ede9e1;
+  --surface3: #e4dfd5;
+  --border:   #d4cfc5;
+  --border2:  #c4bdb0;
+  --ink:      #1a1714;
+  --ink2:     #3d3830;
+  --muted:    #8a8278;
+  --muted2:   #b0a99f;
+  --blue:     #1e3a5f;
+  --blue-lt:  #3466a0;
+  --teal:     #1a5c52;
+  --teal-lt:  #2d8a7a;
+  --amber:    #8a5a00;
+  --amber-lt: #c4820a;
+  --rose:     #7a1f2e;
+  --rose-lt:  #b03045;
+  --font-serif: 'Libre Baskerville', Georgia, serif;
+  --font-sans:  'DM Sans', system-ui, sans-serif;
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-size:14px;min-height:100vh;overflow-x:hidden;}
-.app{display:flex;height:100vh;overflow:hidden;}
-.sidebar{width:280px;min-width:280px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
-.sidebar-header{padding:28px 22px 18px;border-bottom:1px solid var(--border);}
-.sidebar-title{font-family:var(--font-sans);font-size:1.55rem;line-height:1.2;background:linear-gradient(135deg,#1e3a5f 0%,#3466a0 50%,#1a5c52 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;}
-.sidebar-body{flex:1;overflow-y:auto;padding:16px 20px;}
-.sidebar-body::-webkit-scrollbar{width:3px;}
-.sidebar-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-.section-label{font-size:0.62rem;font-weight:600;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--border);}
-.asset-category{margin-bottom:3px;}
-.category-toggle{display:flex;align-items:center;gap:8px;padding:7px 10px;background:none;border:1px solid transparent;border-radius:5px;cursor:pointer;font-family:var(--font-sans);font-size:0.8rem;font-weight:500;color:var(--ink2);width:100%;transition:all 0.15s;text-align:left;}
-.category-toggle:hover{background:var(--surface2);border-color:var(--border);}
-.category-arrow{margin-left:auto;transition:transform 0.2s;font-size:0.55rem;color:var(--muted2);}
-.category-toggle.open{background:var(--surface2);}
-.category-toggle.open .category-arrow{transform:rotate(90deg);}
-.category-items{display:none;padding:3px 0 3px 6px;}
-.category-items.open{display:block;}
-.asset-item{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:4px;cursor:pointer;transition:background 0.12s;font-size:0.78rem;color:var(--ink2);}
-.asset-item:hover{background:var(--surface2);}
-.asset-item input[type=checkbox]{accent-color:var(--blue);width:13px;height:13px;cursor:pointer;flex-shrink:0;}
-.asset-item.selected{color:var(--blue);font-weight:500;}
-.asset-item .ticker-tag{color:var(--muted2);font-size:0.65rem;margin-left:auto;}
-.selected-count{font-size:0.72rem;color:var(--muted);margin-top:6px;}
-.selected-count span{color:var(--blue);font-weight:600;}
-.param-row{margin-bottom:14px;}
-.param-label{display:flex;justify-content:space-between;align-items:center;font-size:0.75rem;color:var(--muted);margin-bottom:7px;}
-.param-label strong{color:var(--ink2);font-weight:600;}
-input[type=range]{width:100%;height:2px;background:var(--border2);border-radius:2px;outline:none;cursor:pointer;appearance:none;}
-input[type=range]::-webkit-slider-thumb{appearance:none;width:13px;height:13px;border-radius:50%;background:var(--blue);border:2px solid var(--surface);cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,0.15);}
-.sidebar-footer{padding:16px 20px;border-top:1px solid var(--border);}
-.btn-run{width:100%;padding:11px 16px;background:var(--blue);border:none;border-radius:6px;color:white;font-family:var(--font-sans);font-size:0.78rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:all 0.18s;}
-.btn-run:hover{background:var(--blue-lt);}
-.btn-run:disabled{opacity:0.4;cursor:not-allowed;}
-.main{flex:1;overflow-y:auto;display:flex;flex-direction:column;background:var(--bg);}
-.main::-webkit-scrollbar{width:4px;}
-.main::-webkit-scrollbar-thumb{background:var(--border);}
-.topbar{padding:0 32px;display:flex;align-items:flex-end;gap:2px;border-bottom:1px solid var(--border);background:var(--surface);}
-.tab-btn{padding:14px 18px 12px;background:none;border:none;font-family:var(--font-sans);font-size:0.75rem;font-weight:500;letter-spacing:0.04em;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.18s;white-space:nowrap;}
-.tab-btn:hover{color:var(--ink);}
-.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:600;}
-.content{flex:1;padding:28px 32px;}
-.kpi-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
-.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;border-left:3px solid var(--border2);}
-.kpi-card.blue{border-left-color:var(--blue);}
-.kpi-card.amber{border-left-color:var(--amber-lt);}
-.kpi-card.teal{border-left-color:var(--teal-lt);}
-.kpi-card.rose{border-left-color:var(--rose-lt);}
-.kpi-label{font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
-.kpi-value{font-family:var(--font-serif);font-size:1.4rem;font-weight:700;}
-.kpi-value.blue{color:var(--blue);}
-.kpi-value.amber{color:var(--amber);}
-.kpi-value.teal{color:var(--teal);}
-.kpi-value.rose{color:var(--rose);}
-.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:24px;}
-.chart-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
-.chart-title{font-family:var(--font-serif);font-size:0.95rem;font-weight:700;color:var(--ink);}
-.chart-subtitle{font-size:0.7rem;color:var(--muted);margin-left:auto;font-style:italic;}
-.chart-with-legend{display:flex;align-items:stretch;}
-.chart-area{flex:1;min-width:0;}
-.chart-legend{width:190px;min-width:190px;border-left:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;gap:9px;background:var(--surface2);}
-.legend-title{font-size:0.62rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:2px;}
-.legend-item{display:flex;align-items:center;gap:8px;font-size:0.75rem;color:var(--ink2);line-height:1.3;}
-.legend-line{width:22px;height:2.5px;border-radius:2px;flex-shrink:0;}
-.legend-line-dashed{width:22px;height:0;border-top:2px dashed currentColor;flex-shrink:0;}
-.cml-controls{padding:14px 20px;border-bottom:1px solid var(--border);background:var(--surface2);}
-.cml-instruction{font-size:0.72rem;color:var(--muted);margin-bottom:12px;font-style:italic;}
-.cml-mix-bar{display:flex;height:5px;border-radius:3px;overflow:hidden;margin-bottom:10px;gap:1px;}
-.cml-mix-rf{background:var(--teal-lt);transition:width 0.08s;border-radius:3px 0 0 3px;}
-.cml-mix-tangent{background:var(--amber-lt);transition:width 0.08s;border-radius:0 3px 3px 0;}
-.cml-mix-leverage{background:var(--rose-lt);transition:width 0.08s;border-radius:0 3px 3px 0;}
-.cml-mix-labels{display:flex;justify-content:space-between;font-size:0.7rem;color:var(--muted);margin-bottom:12px;flex-wrap:wrap;gap:6px;}
-.mix-label-rf{color:var(--teal);}
-.mix-label-tangent{color:var(--amber);}
-.mix-label-leverage{color:var(--rose);}
-.mix-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.mix-kpi{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;}
-.mix-kpi-label{font-size:0.6rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
-.mix-kpi-value{font-family:var(--font-serif);font-size:1.05rem;font-weight:700;}
-.cml-stepper{display:flex;flex-direction:column;gap:1px;margin-left:6px;}
-.cml-stepper-btn{width:18px;height:14px;background:var(--surface3);border:1px solid var(--border);border-radius:3px;font-size:0.6rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);user-select:none;transition:background 0.1s;}
-.cml-stepper-btn:hover{background:var(--border);color:var(--ink);}
-.cml-stepper-btn:active{background:var(--blue);color:white;border-color:var(--blue);}
-.alloc-table{width:100%;border-collapse:collapse;font-size:0.78rem;}
-.alloc-table th{font-size:0.62rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;}
-.alloc-table td{padding:8px 12px;border-bottom:1px solid var(--surface2);}
-.alloc-table tr:last-child td{border-bottom:none;}
-.alloc-table tr:hover td{background:var(--surface2);}
-.alloc-bar-bg{background:var(--surface3);border-radius:2px;height:3px;overflow:hidden;margin-top:2px;}
-.alloc-bar-fill{background:var(--amber-lt);height:3px;border-radius:2px;transition:width 0.3s;}
-.perf-table{width:100%;border-collapse:collapse;font-size:0.8rem;}
-.perf-table th{font-size:0.62rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--border);text-align:right;}
-.perf-table th:first-child{text-align:left;}
-.perf-table td{padding:9px 14px;border-bottom:1px solid var(--surface2);text-align:right;}
-.perf-table td:first-child{text-align:left;}
-.perf-table tr:hover td{background:var(--surface2);}
-.positive{color:var(--teal);font-weight:500;}
-.negative{color:var(--rose);font-weight:500;}
-.corr-cell{width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;border-radius:3px;}
-.corr-table{border-collapse:separate;border-spacing:2px;}
-.corr-label{font-size:0.62rem;color:var(--muted);padding:2px 6px;font-weight:500;}
-.risk-tabs{display:flex;gap:4px;margin-bottom:20px;flex-wrap:wrap;}
-.risk-tab{padding:7px 16px;background:var(--surface);border:1px solid var(--border);border-radius:5px;font-size:0.75rem;font-weight:500;cursor:pointer;transition:all 0.15s;color:var(--ink2);}
-.risk-tab:hover{border-color:var(--blue);color:var(--blue);}
-.risk-tab.active{background:var(--blue);border-color:var(--blue);color:white;font-weight:600;}
-.risk-tab.custom{border-style:dashed;}
-.risk-tab.custom.active{background:var(--ink2);border-color:var(--ink2);border-style:solid;}
-.custom-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
-.custom-kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;border-left:3px solid var(--border2);cursor:pointer;transition:all 0.18s;position:relative;}
-.custom-kpi-card:hover{border-color:var(--blue-lt);box-shadow:0 2px 8px rgba(30,58,95,0.08);}
-.custom-kpi-card.editing{border-left-color:var(--blue);box-shadow:0 0 0 2px rgba(30,58,95,0.15);}
-.custom-kpi-card.teal{border-left-color:var(--teal-lt);}
-.custom-kpi-card.amber{border-left-color:var(--amber-lt);}
-.custom-kpi-card.blue{border-left-color:var(--blue);}
-.custom-input-field{width:100%;background:none;border:none;outline:none;font-family:var(--font-serif);font-size:1.2rem;font-weight:700;color:inherit;padding:0;margin:0;cursor:text;}
-.custom-input-field::placeholder{color:var(--muted2);font-weight:400;font-style:italic;}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
-.loading-overlay{position:fixed;inset:0;background:rgba(244,241,235,0.9);display:none;align-items:center;justify-content:center;z-index:100;flex-direction:column;gap:16px;}
-.loading-overlay.active{display:flex;}
-.spinner{width:34px;height:34px;border:2px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:spin 0.85s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.loading-text{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;}
-.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:400px;gap:10px;color:var(--muted);}
-.empty-icon{font-size:2rem;opacity:0.25;}
-.empty-title{font-family:var(--font-serif);font-size:1rem;color:var(--ink2);}
-.empty-sub{font-size:0.75rem;color:var(--muted);}
-.tab-content{display:none;}
-.tab-content.active{display:block;}
-.risk-tooltip-wrap{position:relative;display:inline-flex;align-items:center;margin-left:5px;vertical-align:middle;}
-.risk-help-btn{width:15px;height:15px;border-radius:50%;background:var(--surface3);border:1px solid var(--border2);color:var(--muted);font-size:0.6rem;font-weight:700;display:inline-flex;align-items:center;justify-content:center;cursor:help;line-height:1;flex-shrink:0;font-family:var(--font-sans);}
-.risk-tooltip-box{display:none;position:absolute;bottom:calc(100% + 8px);left:0;background:var(--ink);color:#f4f1eb;border-radius:8px;padding:12px 14px;width:260px;font-size:0.72rem;line-height:1.55;font-family:var(--font-sans);font-weight:400;box-shadow:0 4px 20px rgba(0,0,0,0.2);z-index:200;pointer-events:none;}
-.risk-tooltip-box::after{content:'';position:absolute;top:100%;left:8px;border:6px solid transparent;border-top-color:var(--ink);}
-.risk-tooltip-box strong{display:block;margin-bottom:5px;font-size:0.75rem;color:#e4dfd5;}
-.risk-tooltip-box .tooltip-math{font-size:0.67rem;color:#b0a99f;margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.1);font-style:italic;}
-.risk-tooltip-wrap:hover .risk-tooltip-box,.risk-tooltip-wrap:focus-within .risk-tooltip-box{display:block;}
-#etfEquivBtn:hover{border-color:var(--blue);color:var(--blue);background:rgba(30,58,95,0.04);}
-.etf-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;}
-.etf-card-header{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
-.etf-metric{font-size:0.72rem;color:var(--muted2);}
-.etf-match-bar{height:5px;border-radius:3px;background:var(--border);margin-top:6px;}
-.etf-match-fill{height:5px;border-radius:3px;}
-.etf-loading{text-align:center;padding:24px;color:var(--muted);font-size:0.8rem;font-style:italic;}
-.contact-btn{margin-left:auto;padding:8px 16px;background:none;border:1px solid var(--border);border-radius:5px;font-family:var(--font-sans);font-size:0.72rem;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.18s;white-space:nowrap;align-self:center;margin-bottom:6px;}
-.contact-btn:hover{border-color:var(--blue);color:var(--blue);}
-.popup-overlay{position:fixed;inset:0;background:rgba(26,23,20,0.35);display:none;align-items:center;justify-content:center;z-index:300;backdrop-filter:blur(2px);}
-.popup-overlay.active{display:flex;}
-.popup-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:32px 36px;max-width:360px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.12);position:relative;}
-.popup-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.1rem;color:var(--muted);cursor:pointer;line-height:1;}
-.popup-close:hover{color:var(--ink);}
-.popup-title{font-family:var(--font-serif);font-size:1rem;font-weight:700;margin-bottom:10px;color:var(--ink);}
-.popup-label{font-size:0.72rem;color:var(--muted);margin-bottom:8px;}
-.popup-mail{display:inline-block;font-size:0.88rem;font-weight:600;color:var(--blue);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:2px;}
-.popup-mail:hover{border-color:var(--blue);}
-.search-wrap{position:relative;margin-bottom:6px;}
-.search-input{width:100%;padding:7px 30px 7px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:5px;font-family:var(--font-sans);font-size:0.78rem;color:var(--ink);outline:none;transition:border-color 0.15s;}
-.search-input:focus{border-color:var(--blue-lt);background:var(--surface);}
-.search-input::placeholder{color:var(--muted2);}
-.search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted2);cursor:pointer;font-size:0.75rem;display:none;line-height:1;}
-.search-clear.visible{display:block;}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-sans); font-size: 14px; min-height: 100vh; overflow-x: hidden; }
+.app { display: flex; height: 100vh; overflow: hidden; }
+
+/* SIDEBAR */
+.sidebar { width: 280px; min-width: 280px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+.sidebar-header { padding: 28px 22px 18px; border-bottom: 1px solid var(--border); }
+.logo { font-family: var(--font-sans); font-size: 0.62rem; font-weight: 500; color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 8px; }
+.sidebar-title { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.sidebar-body { flex: 1; overflow-y: auto; padding: 16px 20px; }
+.sidebar-body::-webkit-scrollbar { width: 3px; }
+.sidebar-body::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+.section-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; color: var(--muted); text-transform: uppercase; margin: 18px 0 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
+.asset-category { margin-bottom: 3px; }
+.category-toggle { display: flex; align-items: center; gap: 8px; padding: 7px 10px; background: none; border: 1px solid transparent; border-radius: 5px; cursor: pointer; font-family: var(--font-sans); font-size: 0.8rem; font-weight: 500; color: var(--ink2); width: 100%; transition: all 0.15s; text-align: left; }
+.category-toggle:hover { background: var(--surface2); border-color: var(--border); }
+.category-arrow { margin-left: auto; transition: transform 0.2s; font-size: 0.55rem; color: var(--muted2); }
+.category-toggle.open { background: var(--surface2); }
+.category-toggle.open .category-arrow { transform: rotate(90deg); }
+.category-items { display: none; padding: 3px 0 3px 6px; }
+.category-items.open { display: block; }
+.asset-item { display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 4px; cursor: pointer; transition: background 0.12s; font-size: 0.78rem; color: var(--ink2); }
+.asset-item:hover { background: var(--surface2); }
+.asset-item input[type=checkbox] { accent-color: var(--blue); width: 13px; height: 13px; cursor: pointer; flex-shrink: 0; }
+.asset-item.selected { color: var(--blue); font-weight: 500; }
+.asset-item .ticker-tag { color: var(--muted2); font-size: 0.65rem; margin-left: auto; }
+.selected-count { font-size: 0.72rem; color: var(--muted); margin-top: 6px; }
+.selected-count span { color: var(--blue); font-weight: 600; }
+.param-row { margin-bottom: 14px; }
+.param-label { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--muted); margin-bottom: 7px; }
+.param-label strong { color: var(--ink2); font-weight: 600; }
+input[type=range] { width: 100%; height: 2px; background: var(--border2); border-radius: 2px; outline: none; cursor: pointer; appearance: none; }
+input[type=range]::-webkit-slider-thumb { appearance: none; width: 13px; height: 13px; border-radius: 50%; background: var(--blue); border: 2px solid var(--surface); cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+.sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
+.btn-run { width: 100%; padding: 11px 16px; background: var(--blue); border: none; border-radius: 6px; color: white; font-family: var(--font-sans); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; transition: all 0.18s; }
+.btn-run:hover { background: var(--blue-lt); }
+.btn-run:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* MAIN */
+.main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; background: var(--bg); }
+.main::-webkit-scrollbar { width: 4px; }
+.main::-webkit-scrollbar-thumb { background: var(--border); }
+.topbar { padding: 0 32px; display: flex; align-items: flex-end; gap: 2px; border-bottom: 1px solid var(--border); background: var(--surface); }
+.tab-btn { padding: 14px 18px 12px; background: none; border: none; font-family: var(--font-sans); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.04em; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.18s; white-space: nowrap; }
+.tab-btn:hover { color: var(--ink); }
+.tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
+.content { flex: 1; padding: 28px 32px; }
+
+/* KPI */
+.kpi-bar { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 24px; }
+.kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; border-left: 3px solid var(--border2); }
+.kpi-card.blue  { border-left-color: var(--blue); }
+.kpi-card.amber { border-left-color: var(--amber-lt); }
+.kpi-card.teal  { border-left-color: var(--teal-lt); }
+.kpi-card.rose  { border-left-color: var(--rose-lt); }
+.kpi-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.kpi-value { font-family: var(--font-serif); font-size: 1.4rem; font-weight: 700; }
+.kpi-value.blue  { color: var(--blue); }
+.kpi-value.amber { color: var(--amber); }
+.kpi-value.teal  { color: var(--teal); }
+.kpi-value.rose  { color: var(--rose); }
+
+/* CHART CARD */
+.chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 24px; }
+.chart-header { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.chart-title { font-family: var(--font-serif); font-size: 0.95rem; font-weight: 700; color: var(--ink); }
+.chart-subtitle { font-size: 0.7rem; color: var(--muted); margin-left: auto; font-style: italic; }
+
+/* Chart + legend side-by-side */
+.chart-with-legend { display: flex; align-items: stretch; }
+.chart-area { flex: 1; min-width: 0; }
+.chart-legend { width: 190px; min-width: 190px; border-left: 1px solid var(--border); padding: 16px 14px; display: flex; flex-direction: column; gap: 9px; background: var(--surface2); }
+.legend-title { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding-bottom: 6px; border-bottom: 1px solid var(--border); margin-bottom: 2px; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--ink2); line-height: 1.3; }
+.legend-line { width: 22px; height: 2.5px; border-radius: 2px; flex-shrink: 0; }
+.legend-line-dashed { width: 22px; height: 0; border-top: 2px dashed currentColor; flex-shrink: 0; }
+
+/* CML CONTROLS */
+.cml-controls { padding: 14px 20px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+.cml-instruction { font-size: 0.72rem; color: var(--muted); margin-bottom: 12px; font-style: italic; }
+.cml-mix-bar { display: flex; height: 5px; border-radius: 3px; overflow: hidden; margin-bottom: 10px; gap: 1px; }
+.cml-mix-rf      { background: var(--teal-lt); transition: width 0.08s; border-radius: 3px 0 0 3px; }
+.cml-mix-tangent { background: var(--amber-lt); transition: width 0.08s; border-radius: 0 3px 3px 0; }
+.cml-mix-leverage{ background: var(--rose-lt); transition: width 0.08s; border-radius: 0 3px 3px 0; }
+.cml-mix-labels { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); margin-bottom: 12px; flex-wrap: wrap; gap: 6px; }
+.mix-label-rf       { color: var(--teal); }
+.mix-label-tangent  { color: var(--amber); }
+.mix-label-leverage { color: var(--rose); }
+.mix-kpis { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.mix-kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; }
+.mix-kpi-label { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.mix-kpi-value { font-family: var(--font-serif); font-size: 1.05rem; font-weight: 700; }
+.cml-stepper {
+  display: flex; flex-direction: column; gap: 1px; margin-left: 6px;
+}
+.cml-stepper-btn {
+  width: 18px; height: 14px; background: var(--surface3);
+  border: 1px solid var(--border); border-radius: 3px;
+  font-size: 0.6rem; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); user-select: none; transition: background 0.1s;
+}
+.cml-stepper-btn:hover { background: var(--border); color: var(--ink); }
+.cml-stepper-btn:active { background: var(--blue); color: white; border-color: var(--blue); }
+
+/* TABLES */
+.alloc-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+.alloc-table th { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+.alloc-table td { padding: 8px 12px; border-bottom: 1px solid var(--surface2); }
+.alloc-table tr:last-child td { border-bottom: none; }
+.alloc-table tr:hover td { background: var(--surface2); }
+.alloc-bar-bg { background: var(--surface3); border-radius: 2px; height: 3px; overflow: hidden; margin-top: 2px; }
+.alloc-bar-fill { background: var(--amber-lt); height: 3px; border-radius: 2px; transition: width 0.3s; }
+.perf-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.perf-table th { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 10px 14px; border-bottom: 1px solid var(--border); text-align: right; }
+.perf-table th:first-child { text-align: left; }
+.perf-table td { padding: 9px 14px; border-bottom: 1px solid var(--surface2); text-align: right; }
+.perf-table td:first-child { text-align: left; }
+.perf-table tr:hover td { background: var(--surface2); }
+.positive { color: var(--teal); font-weight: 500; }
+.negative { color: var(--rose); font-weight: 500; }
+
+/* CORR */
+.corr-cell { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; border-radius: 3px; }
+.corr-table { border-collapse: separate; border-spacing: 2px; }
+.corr-label { font-size: 0.62rem; color: var(--muted); padding: 2px 6px; font-weight: 500; }
+
+/* RISK TABS */
+.risk-tabs { display: flex; gap: 4px; margin-bottom: 20px; flex-wrap: wrap; }
+.risk-tab { padding: 7px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 5px; font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all 0.15s; color: var(--ink2); }
+.risk-tab:hover { border-color: var(--blue); color: var(--blue); }
+.risk-tab.active { background: var(--blue); border-color: var(--blue); color: white; font-weight: 600; }
+.risk-tab.custom { border-style: dashed; }
+.risk-tab.custom.active { background: var(--ink2); border-color: var(--ink2); border-style: solid; }
+
+/* Custom risk inputs */
+.custom-inputs { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:18px; }
+.custom-kpi-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 14px 16px; border-left: 3px solid var(--border2);
+  cursor: pointer; transition: all 0.18s; position: relative;
+}
+.custom-kpi-card:hover { border-color: var(--blue-lt); box-shadow: 0 2px 8px rgba(30,58,95,0.08); }
+.custom-kpi-card.editing { border-left-color: var(--blue); box-shadow: 0 0 0 2px rgba(30,58,95,0.15); }
+.custom-kpi-card.teal  { border-left-color: var(--teal-lt); }
+.custom-kpi-card.amber { border-left-color: var(--amber-lt); }
+.custom-kpi-card.blue  { border-left-color: var(--blue); }
+.custom-kpi-card.rose  { border-left-color: var(--rose-lt); }
+.custom-edit-hint {
+  position: absolute; top: 8px; right: 10px;
+  font-size: 0.58rem; color: var(--muted2); letter-spacing: 0.06em;
+}
+.custom-input-field {
+  width: 100%; background: none; border: none; outline: none;
+  font-family: var(--font-serif); font-size: 1.2rem; font-weight: 700;
+  color: inherit; padding: 0; margin: 0; cursor: text;
+}
+.custom-input-field::placeholder { color: var(--muted2); font-weight: 400; font-style: italic; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+/* LOADING */
+.loading-overlay { position: fixed; inset: 0; background: rgba(244,241,235,0.9); display: none; align-items: center; justify-content: center; z-index: 100; flex-direction: column; gap: 16px; }
+.loading-overlay.active { display: flex; }
+.spinner { width: 34px; height: 34px; border: 2px solid var(--border2); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.85s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+
+/* EMPTY */
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; gap: 10px; color: var(--muted); }
+.empty-icon { font-size: 2rem; opacity: 0.25; }
+.empty-title { font-family: var(--font-serif); font-size: 1rem; color: var(--ink2); }
+.empty-sub { font-size: 0.75rem; color: var(--muted); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Risk tooltip */
+.risk-tooltip-wrap {
+  position: relative; display: inline-flex; align-items: center;
+  margin-left: 5px; vertical-align: middle;
+}
+.risk-help-btn {
+  width: 15px; height: 15px; border-radius: 50%;
+  background: var(--surface3); border: 1px solid var(--border2);
+  color: var(--muted); font-size: 0.6rem; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: help; line-height: 1; flex-shrink: 0;
+  font-family: var(--font-sans);
+}
+.risk-tooltip-box {
+  display: none;
+  position: absolute; bottom: calc(100% + 8px); left: 0;
+  background: var(--ink); color: #f4f1eb;
+  border-radius: 8px; padding: 12px 14px;
+  width: 260px; font-size: 0.72rem; line-height: 1.55;
+  font-family: var(--font-sans); font-weight: 400;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  z-index: 200; pointer-events: none;
+}
+.risk-tooltip-box::after {
+  content: ''; position: absolute; top: 100%; left: 8px;
+  border: 6px solid transparent;
+  border-top-color: var(--ink);
+}
+.risk-tooltip-box strong {
+  display: block; margin-bottom: 5px;
+  font-size: 0.75rem; color: #e4dfd5;
+}
+.risk-tooltip-box .tooltip-math {
+  font-size: 0.67rem; color: #b0a99f;
+  margin-top: 6px; padding-top: 6px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-style: italic;
+}
+.risk-tooltip-wrap:hover .risk-tooltip-box,
+.risk-tooltip-wrap:focus-within .risk-tooltip-box { display: block; }
+
+/* ETF equivalent */
+#etfEquivBtn:hover { border-color: var(--blue); color: var(--blue); background: rgba(30,58,95,0.04); }
+.etf-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+.etf-card-header { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.etf-metric { font-size: 0.72rem; color: var(--muted2); }
+.etf-match-bar { height: 5px; border-radius: 3px; background: var(--border); margin-top: 6px; }
+.etf-match-fill { height: 5px; border-radius: 3px; background: var(--teal); }
+.etf-loading { text-align:center; padding: 24px; color: var(--muted); font-size: 0.8rem; font-style: italic; }
+
+/* Contact button */
+.contact-btn {
+  margin-left: auto; padding: 8px 16px;
+  background: none; border: 1px solid var(--border);
+  border-radius: 5px; font-family: var(--font-sans);
+  font-size: 0.72rem; font-weight: 500; color: var(--muted);
+  cursor: pointer; transition: all 0.18s; white-space: nowrap;
+  align-self: center; margin-bottom: 6px;
+}
+.contact-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+/* Popup overlay */
+.popup-overlay {
+  position: fixed; inset: 0;
+  background: rgba(26,23,20,0.35);
+  display: none; align-items: center; justify-content: center;
+  z-index: 300; backdrop-filter: blur(2px);
+}
+.popup-overlay.active { display: flex; }
+.popup-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 32px 36px; max-width: 360px; width: 90%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  position: relative;
+}
+.popup-close {
+  position: absolute; top: 14px; right: 16px;
+  background: none; border: none; font-size: 1.1rem; color: var(--muted);
+  cursor: pointer; line-height: 1;
+}
+.popup-close:hover { color: var(--ink); }
+.popup-title {
+  font-family: var(--font-serif); font-size: 1rem; font-weight: 700;
+  margin-bottom: 10px; color: var(--ink);
+}
+.popup-label { font-size: 0.72rem; color: var(--muted); margin-bottom: 8px; }
+.popup-mail {
+  display: inline-block;
+  font-size: 0.88rem; font-weight: 600; color: var(--blue);
+  text-decoration: none; border-bottom: 1px solid var(--border);
+  padding-bottom: 2px; transition: border-color 0.15s;
+}
+.popup-mail:hover { border-color: var(--blue); }
+
+/* Search bar */
+.search-wrap { position: relative; margin-bottom: 6px; }
+.search-input {
+  width: 100%; padding: 7px 30px 7px 10px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 5px; font-family: var(--font-sans);
+  font-size: 0.78rem; color: var(--ink); outline: none;
+  transition: border-color 0.15s;
+}
+.search-input:focus { border-color: var(--blue-lt); background: var(--surface); }
+.search-input::placeholder { color: var(--muted2); }
+.search-clear {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: var(--muted2); cursor: pointer;
+  font-size: 0.75rem; display: none; line-height: 1;
+}
+.search-clear.visible { display: block; }
 </style>
 </head>
 <body>
@@ -187,7 +327,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:13px;height:13px;b
 <div class="app">
   <aside class="sidebar">
     <div class="sidebar-header">
-      <div class="sidebar-title">Optimiseur de Portefeuille</div>
+      <div class="sidebar-title" style="font-size:1.55rem;line-height:1.2;background:linear-gradient(135deg,#1e3a5f 0%,#3466a0 50%,#1a5c52 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Optimiseur de Portefeuille</div>
     </div>
     <div class="sidebar-body">
       <div class="section-label">Sélection des actifs</div>
@@ -195,10 +335,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:13px;height:13px;b
         <input class="search-input" id="assetSearch" type="text" placeholder="Rechercher un actif…" oninput="filterAssets(this.value)"/>
         <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
       </div>
-      <div class="selected-count" style="display:flex;align-items:center;justify-content:space-between;">
-        <span>Sélectionnés : <span id="selectedCount">0</span> actifs</span>
-        <button onclick="resetSelection()" title="Tout désélectionner" style="background:none;border:none;font-size:0.68rem;color:var(--blue);cursor:pointer;line-height:1.6;text-decoration:underline;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">Réinitialiser</button>
-      </div>
+      <div class="selected-count" style="display:flex;align-items:center;justify-content:space-between;"><span>Sélectionnés : <span id="selectedCount">0</span> actifs</span><button onclick="resetSelection()" title="Tout désélectionner" style="background:none;border:none;font-size:0.68rem;color:var(--blue);cursor:pointer;line-height:1.6;transition:color .15s;text-decoration:underline;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">Réinitialiser</button></div>
       <div id="assetList"></div>
       <div class="section-label">Paramètres</div>
       <div class="param-row">
@@ -228,18 +365,21 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:13px;height:13px;b
       <button class="contact-btn" onclick="openContact()">Contact</button>
     </div>
     <div class="content">
+
       <div class="kpi-bar" id="kpiBar" style="display:none">
         <div class="kpi-card blue"><div class="kpi-label">Rendement — Tangent</div><div class="kpi-value blue" id="kpiRet">—</div></div>
         <div class="kpi-card amber"><div class="kpi-label">Volatilité — Tangent</div><div class="kpi-value amber" id="kpiVol">—</div></div>
         <div class="kpi-card teal"><div class="kpi-label">Ratio de Sharpe max.</div><div class="kpi-value teal" id="kpiSharpe">—</div></div>
         <div class="kpi-card rose"><div class="kpi-label">Actifs analysés</div><div class="kpi-value rose" id="kpiAssets">—</div></div>
       </div>
+
       <div class="empty-state" id="emptyState">
         <div class="empty-icon">◈</div>
         <div class="empty-title">Aucun portefeuille calculé</div>
         <div class="empty-sub">Sélectionnez au moins 2 actifs, puis cliquez sur « Calculer »</div>
       </div>
 
+      <!-- FRONTIER -->
       <div class="tab-content active" id="tab-frontier">
         <div class="chart-card" id="frontierCard" style="display:none">
           <div class="chart-header">
@@ -253,6 +393,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:13px;height:13px;b
         </div>
       </div>
 
+      <!-- CML -->
       <div class="tab-content" id="tab-cml">
         <div class="chart-card" id="cmlCard" style="display:none">
           <div class="chart-header">
@@ -272,25 +413,25 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:13px;height:13px;b
               <span class="mix-label-leverage" id="leverageLabel" style="display:none">Levier : <strong id="mixLeveragePct">0 %</strong></span>
             </div>
             <div class="mix-kpis">
-              <div class="mix-kpi">
+              <div class="mix-kpi" id="cml-kpi-ret" style="cursor:default;transition:border-color 0.15s">
                 <div class="mix-kpi-label">Rendement</div>
                 <div style="display:flex;align-items:center;gap:4px;margin-top:2px">
                   <span class="mix-kpi-value" id="mixRetInp" style="color:var(--teal);min-width:52px">—</span>
                   <span style="font-size:0.78rem;color:var(--teal)">%</span>
                   <div class="cml-stepper">
-                    <button class="cml-stepper-btn" onmousedown="startCMLStep('ret',+0.1)" onmouseup="stopCMLStep()" onmouseleave="stopCMLStep()" ontouchstart="startCMLStep('ret',+0.1)" ontouchend="stopCMLStep()">▲</button>
-                    <button class="cml-stepper-btn" onmousedown="startCMLStep('ret',-0.1)" onmouseup="stopCMLStep()" onmouseleave="stopCMLStep()" ontouchstart="startCMLStep('ret',-0.1)" ontouchend="stopCMLStep()">▼</button>
+                    <button class="cml-stepper-btn" id="retUp"   onmousedown="startCMLStep('ret',+0.1)" onmouseup="stopCMLStep()" onmouseleave="stopCMLStep()" ontouchstart="startCMLStep('ret',+0.1)" ontouchend="stopCMLStep()">▲</button>
+                    <button class="cml-stepper-btn" id="retDown" onmousedown="startCMLStep('ret',-0.1)" onmouseup="stopCMLStep()" onmouseleave="stopCMLStep()" ontouchstart="startCMLStep('ret',-0.1)" ontouchend="stopCMLStep()">▼</button>
                   </div>
                 </div>
               </div>
-              <div class="mix-kpi">
+              <div class="mix-kpi" id="cml-kpi-vol" style="cursor:default;transition:border-color 0.15s">
                 <div class="mix-kpi-label">Volatilité</div>
                 <div style="display:flex;align-items:center;gap:4px;margin-top:2px">
                   <span class="mix-kpi-value" id="mixVolInp" style="color:var(--amber);min-width:52px">—</span>
                   <span style="font-size:0.78rem;color:var(--amber)">%</span>
                   <div class="cml-stepper">
-                    <button class="cml-stepper-btn" onmousedown="startCMLStep('vol',+0.1)" onmouseup="stopCMLStep()" onmouseleave="stopCMLStep()" ontouchstart="startCMLStep('vol',+0.1)" ontouchend="stopCMLStep()">▲</button>
-                    <button class="cml-stepper-btn" onmousedown="startCMLStep('vol',-0.1)" onmouseup="stopCMLStep()" onmouseleave="stopCMLStep()" ontouchstart="startCMLStep('vol',-0.1)" ontouchend="stopCMLStep()">▼</button>
+                    <button class="cml-stepper-btn" id="volUp"   onmousedown="startCMLStep('vol',+0.1)" onmouseup="stopCMLStep()" onmouseleave="stopCMLStep()" ontouchstart="startCMLStep('vol',+0.1)" ontouchend="stopCMLStep()">▲</button>
+                    <button class="cml-stepper-btn" id="volDown" onmousedown="startCMLStep('vol',-0.1)" onmouseup="stopCMLStep()" onmouseleave="stopCMLStep()" ontouchstart="startCMLStep('vol',-0.1)" ontouchend="stopCMLStep()">▼</button>
                   </div>
                 </div>
               </div>
@@ -314,13 +455,18 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:13px;height:13px;b
         </div>
       </div>
 
+      <!-- RISK -->
       <div class="tab-content" id="tab-risk">
         <div id="riskCard" style="display:none">
           <div class="risk-tabs" id="riskTabs"></div>
           <div class="two-col" id="riskContent"></div>
           <div style="margin-top:18px;text-align:center">
             <button id="etfEquivBtn" onclick="computeETFEquivalent()"
-              style="font-family:var(--font-sans);font-size:0.78rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;background:none;border:1.5px dashed var(--border2);border-radius:6px;padding:9px 22px;cursor:pointer;color:var(--ink2);transition:all 0.15s">
+              style="font-family:var(--font-sans);font-size:0.78rem;font-weight:600;
+                     letter-spacing:0.06em;text-transform:uppercase;
+                     background:none;border:1.5px dashed var(--border2);
+                     border-radius:6px;padding:9px 22px;cursor:pointer;
+                     color:var(--ink2);transition:all 0.15s">
               Composition ETF équivalent
             </button>
           </div>
@@ -328,6 +474,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:13px;height:13px;b
         </div>
       </div>
 
+      <!-- PERF -->
       <div class="tab-content" id="tab-perf">
         <div class="chart-card" id="perfCard" style="display:none">
           <div class="chart-header"><span class="chart-title">Performances individuelles</span></div>
@@ -342,21 +489,7 @@ input[type=range]::-webkit-slider-thumb{appearance:none;width:13px;height:13px;b
   </main>
 </div>
 
-<div class="popup-overlay" id="contactPopup" onclick="if(event.target===this)closeContact()">
-  <div class="popup-box">
-    <button class="popup-close" onclick="closeContact()">✕</button>
-    <div class="popup-title">Contact</div>
-    <div class="popup-label">Pour toute question ou suggestion :</div>
-    <div id="contactMailTarget"></div>
-  </div>
-</div>
-
 <script>
-// ── Config ────────────────────────────────────────────────────────────────────
-// Remplacez cette URL par l'URL de votre backend Render après déploiement
-const API_URL = 'https://app-backend-k9i5.onrender.com';
-
-// ── Asset list ────────────────────────────────────────────────────────────────
 const ASSETS = {
   "Actions américaines": {
     "Apple":"AAPL","Microsoft":"MSFT","Amazon":"AMZN","Alphabet":"GOOGL","NVIDIA":"NVDA",
@@ -383,96 +516,45 @@ const ASSETS = {
   }
 };
 
-let appState = { selected: new Set(), rf: 0.03, period: '2y', nSim: 6000, results: null, cmlExposure: 1.0 };
+let appState = { selected:new Set(), rf:0.03, period:'2y', nSim:6000, results:null, cmlExposure:1.0 };
 
-// ── Sidebar ───────────────────────────────────────────────────────────────────
 function buildSidebar() {
   const container = document.getElementById('assetList');
   for (const [cat, assets] of Object.entries(ASSETS)) {
     const catDiv = document.createElement('div'); catDiv.className = 'asset-category';
     const toggle = document.createElement('button'); toggle.className = 'category-toggle';
-    toggle.innerHTML = `<span>${cat}</span><span class="category-arrow">▶</span>`;
-    toggle.onclick = () => {
-      toggle.classList.toggle('open');
-      itemsDiv.classList.toggle('open');
-    };
-    const itemsDiv = document.createElement('div'); itemsDiv.className = 'category-items';
+    toggle.innerHTML = `${cat} <span class="category-arrow">▶</span>`;
+    const items = document.createElement('div'); items.className = 'category-items';
+    toggle.onclick = () => { toggle.classList.toggle('open'); items.classList.toggle('open'); };
     for (const [name, ticker] of Object.entries(assets)) {
       const item = document.createElement('label'); item.className = 'asset-item';
-      const cb = document.createElement('input'); cb.type = 'checkbox'; cb.value = ticker;
-      cb.onchange = () => toggleAsset(ticker, cb.checked, item);
-      item.appendChild(cb);
-      item.appendChild(document.createTextNode(name));
-      const tag = document.createElement('span'); tag.className = 'ticker-tag'; tag.textContent = ticker;
-      item.appendChild(tag);
-      itemsDiv.appendChild(item);
+      item.innerHTML = `<input type="checkbox" value="${ticker}"/> ${name} <span class="ticker-tag">${ticker}</span>`;
+      item.querySelector('input').addEventListener('change', e => {
+        if (e.target.checked) { appState.selected.add(ticker); item.classList.add('selected'); }
+        else { appState.selected.delete(ticker); item.classList.remove('selected'); }
+        document.getElementById('selectedCount').textContent = appState.selected.size;
+      });
+      items.appendChild(item);
     }
-    catDiv.appendChild(toggle); catDiv.appendChild(itemsDiv);
-    container.appendChild(catDiv);
+    catDiv.appendChild(toggle); catDiv.appendChild(items); container.appendChild(catDiv);
   }
 }
 
-function toggleAsset(ticker, checked, item) {
-  if (checked) { appState.selected.add(ticker); item.classList.add('selected'); }
-  else { appState.selected.delete(ticker); item.classList.remove('selected'); }
-  document.getElementById('selectedCount').textContent = appState.selected.size;
-}
+const periodLabels = {1:'1 an',2:'2 ans',3:'3 ans',4:'4 ans',5:'5 ans'};
+document.getElementById('periodRange').addEventListener('input', e => {
+  document.getElementById('periodVal').textContent = periodLabels[+e.target.value];
+  appState.period = e.target.value + 'y';
+});
+document.getElementById('rfRange').addEventListener('input', e => {
+  const v = parseFloat(e.target.value);
+  document.getElementById('rfVal').textContent = v.toFixed(1).replace('.',',') + ' %';
+  appState.rf = v / 100;
+});
+document.getElementById('simRange').addEventListener('input', e => {
+  document.getElementById('simVal').textContent = (+e.target.value).toLocaleString('fr');
+  appState.nSim = +e.target.value;
+});
 
-function resetSelection() {
-  appState.selected.clear();
-  document.querySelectorAll('.asset-item').forEach(el => {
-    el.classList.remove('selected');
-    const cb = el.querySelector('input[type="checkbox"]');
-    if (cb) cb.checked = false;
-  });
-  document.getElementById('selectedCount').textContent = 0;
-}
-
-function filterAssets(query) {
-  const q = query.trim().toLowerCase();
-  document.getElementById('searchClear').classList.toggle('visible', q.length > 0);
-  document.querySelectorAll('.asset-category').forEach(cat => {
-    const items = cat.querySelectorAll('.asset-item');
-    const toggle = cat.querySelector('.category-toggle');
-    const itemsDiv = cat.querySelector('.category-items');
-    if (!q) {
-      items.forEach(item => item.style.display = '');
-      cat.style.display = '';
-      if (!cat._wasOpen) { toggle.classList.remove('open'); itemsDiv.classList.remove('open'); }
-      delete cat._wasOpen;
-    } else {
-      if (cat._wasOpen === undefined) cat._wasOpen = toggle.classList.contains('open');
-      let anyVisible = false;
-      items.forEach(item => {
-        const match = item.textContent.toLowerCase().includes(q);
-        item.style.display = match ? '' : 'none';
-        if (match) anyVisible = true;
-      });
-      cat.style.display = anyVisible ? '' : 'none';
-      if (anyVisible) { toggle.classList.add('open'); itemsDiv.classList.add('open'); }
-      else { toggle.classList.remove('open'); itemsDiv.classList.remove('open'); }
-    }
-  });
-}
-function clearSearch() { const i=document.getElementById('assetSearch'); i.value=''; filterAssets(''); i.focus(); }
-
-// ── Sliders ───────────────────────────────────────────────────────────────────
-const PERIODS = {1:'1y',2:'2y',3:'3y',5:'5y'};
-const PERIOD_LABELS = {1:'1 an',2:'2 ans',3:'3 ans',5:'5 ans'};
-document.getElementById('periodRange').oninput = function() {
-  appState.period = PERIODS[this.value] || '2y';
-  document.getElementById('periodVal').textContent = PERIOD_LABELS[this.value] || '2 ans';
-};
-document.getElementById('rfRange').oninput = function() {
-  appState.rf = this.value / 100;
-  document.getElementById('rfVal').textContent = parseFloat(this.value).toFixed(1).replace('.', ',') + ' %';
-};
-document.getElementById('simRange').oninput = function() {
-  appState.nSim = parseInt(this.value);
-  document.getElementById('simVal').textContent = parseInt(this.value).toLocaleString('fr-FR');
-};
-
-// ── Tabs ──────────────────────────────────────────────────────────────────────
 function switchTab(name, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -480,108 +562,542 @@ function switchTab(name, btn) {
   document.getElementById('tab-' + name).classList.add('active');
 }
 
-function setLoading(txt) { document.getElementById('loadingText').textContent = txt; }
+const API_URL = 'https://app-backend-k9i5.onrender.com';
 
-// ── Main API call ─────────────────────────────────────────────────────────────
-async function runOptimization() {
-  const tickers = [...appState.selected];
-  if (tickers.length < 2) { alert('Sélectionnez au moins 2 actifs.'); return; }
-
-  document.getElementById('loadingOverlay').classList.add('active');
-  document.getElementById('emptyState').style.display = 'none';
-  document.getElementById('btnRun').disabled = true;
-  setLoading('Envoi de la requête au serveur…');
-
-  const fetchWithRetry = async (url, options, retries = 5) => {
-    for (let i = 0; i < retries; i++) {
+async function fetchOneTicker(ticker, period) {
+  const y1 = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?range=${period}&interval=1wk&includePrePost=false`;
+  const y2 = `https://query2.finance.yahoo.com/v8/finance/chart/${ticker}?range=${period}&interval=1wk&includePrePost=false`;
+  const proxies = [
+    u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+    u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+    u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+  ];
+  for (const base of [y1, y2]) {
+    for (const proxyFn of proxies) {
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 300000);
-        const resp = await fetch(url, { ...options, signal: controller.signal });
-        clearTimeout(timeoutId);
-        return resp;
-      } catch (err) {
-        if (i === retries - 1) throw err;
-        setLoading(`Serveur en démarrage, nouvelle tentative (${i + 2}/${retries})…`);
-        await new Promise(r => setTimeout(r, 8000));
-      }
+        const resp = await fetch(proxyFn(base), { signal: AbortSignal.timeout(9000) });
+        if (!resp.ok) continue;
+        const data = await resp.json();
+        const result = data?.chart?.result?.[0];
+        if (!result) continue;
+        const closes = result?.indicators?.adjclose?.[0]?.adjclose || result?.indicators?.quote?.[0]?.close;
+        const timestamps = result?.timestamp;
+        if (!closes || !timestamps) continue;
+        const prices = [];
+        for (let j = 0; j < closes.length; j++) if (closes[j] != null) prices.push({t:timestamps[j], p:closes[j]});
+        if (prices.length > 10) return prices;
+      } catch(e) { /* try next */ }
     }
-  };
-
-  try {
-    const resp = await fetchWithRetry(`${API_URL}/optimize`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        tickers,
-        period: appState.period,
-        rf: appState.rf,
-        nSim: appState.nSim,
-      })
-    });
-
-    if (!resp.ok) {
-      const err = await resp.json().catch(() => ({ detail: resp.statusText }));
-      throw new Error(err.detail || 'Erreur serveur');
-    }
-
-    setLoading('Traitement des résultats…');
-    const data = await resp.json();
-
-    // Build allNames from available tickers
-    data.allNames = data.available.map(t => {
-      for (const [, assets] of Object.entries(ASSETS))
-        for (const [name, ticker] of Object.entries(assets))
-          if (ticker === t) return name;
-      return t;
-    });
-
-    appState.results = data;
-    appState.cmlExposure = 1.0;
-    renderAll();
-  } catch(e) {
-    console.error(e);
-    alert('Erreur : ' + e.message);
-  } finally {
-    document.getElementById('loadingOverlay').classList.remove('active');
-    document.getElementById('btnRun').disabled = false;
   }
+  return null;
 }
 
-// ── Plot helpers ──────────────────────────────────────────────────────────────
+async function fetchPrices(tickers, period) {
+  // Try backend first (bypasses Yahoo Finance CORS restrictions)
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
+    const resp = await fetch(`${API_URL}/prices`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tickers, period }),
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    if (resp.ok) {
+      const data = await resp.json();
+      return data.prices;
+    }
+  } catch(e) { /* fall through to local fetch */ }
+
+  // Fallback: fetch directly from Yahoo Finance
+  const results = {};
+  const chunkSize = 4;
+  for (let i = 0; i < tickers.length; i += chunkSize) {
+    const chunk = tickers.slice(i, i + chunkSize);
+    await Promise.all(chunk.map(async ticker => {
+      const prices = await fetchOneTicker(ticker, period);
+      if (prices) results[ticker] = prices;
+    }));
+  }
+  return results;
+}
+
+function returns(prices) {
+  const r = [];
+  for (let i=1;i<prices.length;i++) r.push((prices[i]-prices[i-1])/prices[i-1]);
+  return r;
+}
+function mean(a) { return a.reduce((s,v)=>s+v,0)/a.length; }
+function cov(a,b) { const ma=mean(a),mb=mean(b); return a.map((v,i)=>(v-ma)*(b[i]-mb)).reduce((s,v)=>s+v,0)/(a.length-1); }
+function std(a) { return Math.sqrt(cov(a,a)); }
+
+function portfolioStats(weights, meanRets, covMatrix, rf) {
+  const n=weights.length;
+  let ret=0; for(let i=0;i<n;i++) ret+=weights[i]*meanRets[i]; ret*=52;
+  let variance=0; for(let i=0;i<n;i++) for(let j=0;j<n;j++) variance+=weights[i]*weights[j]*covMatrix[i][j];
+  const vol=Math.sqrt(variance*52);
+  return {ret, vol, sharpe:vol>0?(ret-rf)/vol:0};
+}
+
+function buildCovMatrix(rets2d, n) {
+  const m=Array.from({length:n},()=>new Array(n).fill(0));
+  for(let i=0;i<n;i++) for(let j=0;j<n;j++) m[i][j]=cov(rets2d[i],rets2d[j]);
+  return m;
+}
+
+// ── Portfolio Optimization via Projected Gradient Descent ──────────────
+
+// Project weight vector onto probability simplex (sum=1, all>=0)
+function projectSimplex(w) {
+  const n = w.length;
+  const sorted = [...w].sort((a,b)=>b-a);
+  let cumsum = 0, rho = 0;
+  for (let i=0; i<n; i++) {
+    cumsum += sorted[i];
+    if (sorted[i] - (cumsum - 1)/(i+1) > 0) rho = i;
+  }
+  const cumsum2 = sorted.slice(0,rho+1).reduce((a,b)=>a+b,0);
+  const theta = (cumsum2 - 1) / (rho + 1);
+  return w.map(v => Math.max(0, v - theta));
+}
+
+// Projected gradient descent to minimize variance (optionally with soft return target)
+function pgdMinVar(meanRets, covMatrix, targetRet, nIter=800, lr=0.5) {
+  const n = meanRets.length;
+  const mu52 = meanRets.map(r=>r*52);
+  // Cov annualized = covMatrix * 52
+  const C = covMatrix.map(row => row.map(v => v*52));
+
+  // Warm start: equal weight, then try to find a good starting point
+  let w = Array(n).fill(1/n);
+
+  // If target return given, bias initial weights toward high-return assets
+  if (targetRet !== undefined) {
+    const sorted = mu52.map((r,i)=>({r,i})).sort((a,b)=>b.r-a.r);
+    w = Array(n).fill(0);
+    // Concentrate on assets closest to target return
+    let allocated = 0;
+    for (const {r,i} of sorted) {
+      if (allocated >= 0.9) break;
+      w[i] = Math.min(0.5, 0.9 - allocated);
+      allocated += w[i];
+    }
+    w = projectSimplex(w);
+  }
+
+  let bestW = [...w];
+  let bestVol = portfolioStats(w, meanRets, covMatrix, 0).vol;
+
+  for (let iter = 0; iter < nIter; iter++) {
+    // Gradient of variance = 2 * C * w
+    const grad = Array(n).fill(0);
+    for (let i=0;i<n;i++) for (let j=0;j<n;j++) grad[i] += 2*C[i][j]*w[j];
+
+    // If we have a target return, add penalty gradient to enforce it
+    if (targetRet !== undefined) {
+      const curRet = mu52.reduce((s,r,i)=>s+r*w[i], 0);
+      const penalty = 80 * (curRet - targetRet); // large penalty coefficient
+      for (let i=0;i<n;i++) grad[i] -= penalty * mu52[i];
+    }
+
+    // Adaptive learning rate
+    const stepSize = lr / (1 + iter * 0.005);
+    const wNew = w.map((v,i) => v - stepSize * grad[i]);
+    w = projectSimplex(wNew);
+
+    const stats = portfolioStats(w, meanRets, covMatrix, 0);
+    const retOk = targetRet === undefined || Math.abs(stats.ret - targetRet) < 0.04;
+    if (retOk && stats.vol < bestVol) {
+      bestVol = stats.vol;
+      bestW = [...w];
+    }
+  }
+  return bestW;
+}
+
+// Max Sharpe via gradient ascent on Sharpe ratio
+function optimizeMaxSharpe(meanRets, covMatrix, rf, iters=6000) {
+  const n = meanRets.length;
+
+  // Phase 1: Monte Carlo to find good region
+  let bestW = Array(n).fill(1/n);
+  let bestS = portfolioStats(bestW, meanRets, covMatrix, rf).sharpe;
+  for (let i=0; i<iters; i++) {
+    const raw = Array.from({length:n}, () => -Math.log(Math.random()+1e-10));
+    const s = raw.reduce((a,b)=>a+b,0);
+    const w = raw.map(v=>v/s);
+    const sh = portfolioStats(w, meanRets, covMatrix, rf).sharpe;
+    if (sh > bestS) { bestS=sh; bestW=[...w]; }
+  }
+
+  // Phase 2: Projected gradient ascent on Sharpe from best Monte Carlo point
+  const mu52 = meanRets.map(r=>r*52);
+  const C = covMatrix.map(row=>row.map(v=>v*52));
+  let w = [...bestW];
+
+  for (let iter=0; iter<1500; iter++) {
+    const ret = mu52.reduce((s,r,i)=>s+r*w[i],0);
+    const variance = w.reduce((s,wi,i)=>s+wi*C[i].reduce((ss,cij,j)=>ss+cij*w[j],0),0);
+    const vol = Math.sqrt(Math.max(variance, 1e-10));
+    const excess = ret - rf;
+
+    // Gradient of Sharpe = (mu*vol - excess * Cw/vol) / vol^2
+    const Cw = Array(n).fill(0);
+    for (let i=0;i<n;i++) for (let j=0;j<n;j++) Cw[i]+=C[i][j]*w[j];
+
+    const grad = mu52.map((m,i) => (m*vol - excess*Cw[i]/vol) / (vol*vol));
+    const lr = 0.03 / (1 + iter*0.003);
+    const wNew = w.map((v,i) => v + lr*grad[i]);
+    w = projectSimplex(wNew);
+
+    const sh = portfolioStats(w, meanRets, covMatrix, rf).sharpe;
+    if (sh > bestS) { bestS=sh; bestW=[...w]; }
+  }
+  return bestW;
+}
+
+// Min variance portfolio (with optional return target)
+function optimizeMinVar(meanRets, covMatrix, rf, targetRet) {
+  return pgdMinVar(meanRets, covMatrix, targetRet, 600, 0.4);
+}
+
+// Toolbar: only zoom/pan/reset
 const TOOLBAR = {
   responsive:true, displayModeBar:true, displaylogo:false,
   modeBarButtonsToRemove:['select2d','lasso2d','hoverClosestCartesian','hoverCompareCartesian','toggleSpikelines','sendDataToCloud','toImage'],
 };
+
 function plotLayout() {
   return {
     paper_bgcolor:'transparent', plot_bgcolor:'#faf8f4',
-    font:{color:'#3d3830',family:'DM Sans, sans-serif',size:11},
-    xaxis:{title:{text:'Volatilité annualisée (%)',font:{size:11,color:'#8a8278'},standoff:12},gridcolor:'#e4dfd5',gridwidth:1,zeroline:false,tickfont:{size:10,color:'#8a8278'},linecolor:'#d4cfc5',linewidth:1,mirror:true},
-    yaxis:{title:{text:'Rendement annualisé (%)',font:{size:11,color:'#8a8278'},standoff:12},gridcolor:'#e4dfd5',gridwidth:1,zeroline:false,tickfont:{size:10,color:'#8a8278'},linecolor:'#d4cfc5',linewidth:1,mirror:true},
+    font:{color:'#3d3830', family:'DM Sans, sans-serif', size:11},
+    xaxis:{
+      title:{text:'Volatilité annualisée (%)', font:{size:11,color:'#8a8278'}, standoff:12},
+      gridcolor:'#e4dfd5', gridwidth:1, zeroline:false,
+      tickfont:{size:10,color:'#8a8278'}, linecolor:'#d4cfc5', linewidth:1, mirror:true,
+    },
+    yaxis:{
+      title:{text:'Rendement annualisé (%)', font:{size:11,color:'#8a8278'}, standoff:12},
+      gridcolor:'#e4dfd5', gridwidth:1, zeroline:false,
+      tickfont:{size:10,color:'#8a8278'}, linecolor:'#d4cfc5', linewidth:1, mirror:true,
+    },
     showlegend:false,
-    hoverlabel:{bgcolor:'#faf8f4',bordercolor:'#1e3a5f',font:{size:11,color:'#1a1714',family:'DM Sans, sans-serif'}},
-    margin:{l:60,r:20,t:20,b:60},
+    hoverlabel:{bgcolor:'#faf8f4', bordercolor:'#1e3a5f', font:{size:11,color:'#1a1714',family:'DM Sans, sans-serif'}},
+    margin:{l:60, r:20, t:20, b:60},
     dragmode:'zoom',
   };
 }
 
-// ── Client-side helpers (no algo — only display) ──────────────────────────────
-function portfolioStatsLocal(weights, meanRets, covMatrix, rf) {
-  const n = weights.length;
-  let ret = 0; for(let i=0;i<n;i++) ret += weights[i]*meanRets[i]; ret *= 52;
-  let variance = 0; for(let i=0;i<n;i++) for(let j=0;j<n;j++) variance += weights[i]*weights[j]*covMatrix[i][j];
-  const vol = Math.sqrt(variance*52);
-  return {ret, vol, sharpe: vol>0?(ret-rf)/vol:0};
+async function runOptimization() {
+  const tickers = [...appState.selected];
+  if (tickers.length < 2) { alert('Sélectionnez au moins 2 actifs.'); return; }
+  document.getElementById('loadingOverlay').classList.add('active');
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('btnRun').disabled = true;
+  try {
+    setLoading('Récupération des données de marché…');
+    const rawPrices = await fetchPrices(tickers, appState.period);
+    const available = tickers.filter(t => rawPrices[t] && rawPrices[t].length > 10);
+    if (available.length < 2) { alert('Données insuffisantes.'); return; }
+
+    const allNames = available.map(t => {
+      for (const [cat,assets] of Object.entries(ASSETS))
+        for (const [name,ticker] of Object.entries(assets))
+          if (ticker===t) return name;
+      return t;
+    });
+
+    const minLen = Math.min(...available.map(t=>rawPrices[t].length));
+    const priceArrays = available.map(t=>rawPrices[t].slice(-minLen).map(d=>d.p));
+    const retsArrays = priceArrays.map(arr=>returns(arr));
+    const minRetLen = Math.min(...retsArrays.map(r=>r.length));
+    const retsAligned = retsArrays.map(r=>r.slice(-minRetLen));
+
+    setLoading('Calcul de la frontière efficiente…'); await sleep(30);
+
+    const meanRets = retsAligned.map(r=>mean(r));
+    const annMeanRets = meanRets.map(r=>r*52);
+    const covMatrix = buildCovMatrix(retsAligned, available.length);
+    const annStds = retsAligned.map(r=>std(r)*Math.sqrt(52));
+    const n = available.length;
+
+    const simRets=[],simVols=[],simSharpes=[],simWeightsAll=[];
+    for(let i=0;i<appState.nSim;i++){
+      const raw=Array.from({length:n},()=>-Math.log(Math.random()+1e-10));
+      const s=raw.reduce((a,b)=>a+b,0); const w=raw.map(v=>v/s);
+      const stats=portfolioStats(w,meanRets,covMatrix,appState.rf);
+      simRets.push(stats.ret); simVols.push(stats.vol); simSharpes.push(stats.sharpe); simWeightsAll.push(w);
+    }
+
+    setLoading('Optimisation du portefeuille tangent…'); await sleep(30);
+    const tangentW = optimizeMaxSharpe(meanRets, covMatrix, appState.rf, 4000);
+    const tangentStats = portfolioStats(tangentW, meanRets, covMatrix, appState.rf);
+    const minVarW = optimizeMinVar(meanRets, covMatrix, appState.rf);
+    const minVarStats = portfolioStats(minVarW, meanRets, covMatrix, appState.rf);
+
+    setLoading('Construction de la frontière efficiente…'); await sleep(30);
+
+    // ── FRONTIÈRE EFFICIENTE ──────────────────────────────────────────────────
+    // 1. Pool dense : simulations MC normales + simulations Dirichlet concentrées
+    //    (poids biaisés vers les coins du simplexe → couvre la frontière)
+    // 2. Binning en rendement (500 tranches) → min vol par tranche
+    //    → sélectionne les points les plus à gauche dans chaque tranche
+    // 3. Lissage LOESS (fenêtre glissante) → supprime les escaliers
+
+    // ── CONSTRUCTION ITÉRATIVE DE LA FRONTIÈRE (5 boucles) ──────────────────
+    // Principe : chaque itération raffine la frontière précédente
+    // en perturbant les points gagnants → convergence vers la vraie frontière
+
+    // Pool initial : simulations MC + actifs individuels + minVar + tangent
+    // ── Paramètres adaptatifs selon le nombre d'actifs ─────────────────────────
+    const isSmall  = n <= 6;
+    const isMedium = n > 6 && n <= 15;
+    const isLarge  = n > 15;
+
+    const N_ITER       = isSmall ? 4   : isMedium ? 5   : 8;
+    const N_PERTURB    = isSmall ? 60  : isMedium ? 80  : 150;
+    const N_EDGE_PTS   = isSmall ? 20  : isMedium ? 30  : 40;
+    const N_DIRICHLET  = isSmall ? 0   : isMedium ? 300 : 1000;
+    const N_COARSE     = isSmall ? 60  : isMedium ? 80  : 120;
+    const epsilons     = isSmall
+      ? [0.20, 0.12, 0.06, 0.02]
+      : isMedium
+        ? [0.20, 0.14, 0.09, 0.05, 0.02]
+        : [0.30, 0.22, 0.16, 0.11, 0.07, 0.04, 0.02, 0.01];
+
+    setLoading(`Initialisation pool (${n} actifs, mode ${isSmall?'rapide':isMedium?'standard':'haute résolution'})…`); await sleep(10);
+
+    // Pool initial : minVar + tangent + actifs individuels
+    let pool = [
+      { v: minVarStats.vol, r: minVarStats.ret, w: minVarW },
+      { v: tangentStats.vol, r: tangentStats.ret, w: tangentW },
+    ];
+    for (let i = 0; i < n; i++) {
+      const w0 = new Array(n).fill(0); w0[i] = 1;
+      const s0 = portfolioStats(w0, meanRets, covMatrix, appState.rf);
+      pool.push({ v: s0.vol, r: s0.ret, w: w0 });
+    }
+
+    // Arêtes du simplexe : interpolations paires d'actifs
+    for (let i = 0; i < n; i++) {
+      for (let j = i+1; j < n; j++) {
+        for (let k = 1; k < N_EDGE_PTS; k++) {
+          const a = k / N_EDGE_PTS;
+          const w = new Array(n).fill(0); w[i] = 1-a; w[j] = a;
+          const st = portfolioStats(w, meanRets, covMatrix, appState.rf);
+          pool.push({ v: st.vol, r: st.ret, w: [...w] });
+        }
+      }
+    }
+
+    // Grand n : Dirichlet uniforme concentré sur TOUS les actifs
+    // (pas de sélection directionnelle qui crée des clusters isolés)
+    if (N_DIRICHLET > 0) {
+      for (let s = 0; s < N_DIRICHLET; s++) {
+        // Dirichlet avec exposant modéré (2-3) → concentré mais pas trop
+        const raw = Array.from({length: n}, () => Math.pow(-Math.log(Math.random()+1e-10), 3));
+        const sum = raw.reduce((a,b)=>a+b,0);
+        if (sum < 1e-10) continue;
+        const w = raw.map(v=>v/sum);
+        const st = portfolioStats(w, meanRets, covMatrix, appState.rf);
+        pool.push({ v: st.vol, r: st.ret, w });
+      }
+    }
+
+    // Fonction utilitaire : binning max-ret
+    function extractFrontierSeeds(pts, nBins) {
+      const vMin = Math.min(...pts.map(p=>p.v));
+      const vMax = Math.max(...pts.map(p=>p.v));
+      const bSz = (vMax - vMin) / nBins;
+      const b = new Array(nBins).fill(null);
+      for (const p of pts) {
+        const idx = Math.min(nBins-1, Math.floor((p.v - vMin) / bSz));
+        if (!b[idx] || p.r > b[idx].r) b[idx] = p;
+      }
+      return b.filter(x => x !== null);
+    }
+
+    // Itérations de raffinage adaptatif
+    for (let iter = 0; iter < N_ITER; iter++) {
+      setLoading(`Raffinage frontière — itération ${iter+1}/${N_ITER}…`); await sleep(10);
+      const seeds = extractFrontierSeeds(pool, N_COARSE);
+      const eps = epsilons[iter];
+      const newPts = [];
+      for (const seed of seeds) {
+        for (let s = 0; s < N_PERTURB; s++) {
+          const noise = seed.w.map(() => (Math.random() - 0.5) * 2 * eps);
+          const wP = seed.w.map((v, i) => Math.max(0, v + noise[i]));
+          const wSum = wP.reduce((a,b) => a+b, 0);
+          if (wSum < 1e-10) continue;
+          const wn = wP.map(v => v/wSum);
+          const st = portfolioStats(wn, meanRets, covMatrix, appState.rf);
+          newPts.push({ v: st.vol, r: st.ret, w: wn });
+        }
+      }
+      pool = pool.concat(newPts);
+    }
+
+    setLoading('Tracé de la frontière efficiente…'); await sleep(10);
+
+    // ── Binning final fin → max rendement par tranche de vol ─────────────────
+    const N_BINS = 500;
+    const vAllMin = Math.min(...pool.map(p => p.v));
+    const vAllMax = Math.max(...pool.map(p => p.v));
+    const binSz = (vAllMax - vAllMin) / N_BINS;
+    const bins = new Array(N_BINS).fill(null);
+    for (const p of pool) {
+      const b = Math.min(N_BINS-1, Math.floor((p.v - vAllMin) / binSz));
+      if (!bins[b] || p.r > bins[b].r) bins[b] = p;
+    }
+    let efCands = bins.filter(b => b !== null);
+    efCands.sort((a,b) => a.v - b.v);
+
+    // ── Détection du gap sur le binning BRUT (avant tout filtre) ───────────────
+    // Gap = saut de vol > 4× la médiane des espacements → rupture réelle des données
+    const retMinVar = minVarStats.ret;
+    if (efCands.length > 2) {
+      const gaps = [];
+      for (let i = 1; i < efCands.length; i++) gaps.push(efCands[i].v - efCands[i-1].v);
+      gaps.sort((a,b) => a-b);
+      const medianGap = gaps[Math.floor(gaps.length / 2)];
+      const GAP_THRESHOLD = medianGap * 4;
+      for (let i = 1; i < efCands.length; i++) {
+        if (efCands[i].v - efCands[i-1].v > GAP_THRESHOLD) {
+          efCands = efCands.slice(0, i); // couper au premier gap
+          break;
+        }
+      }
+    }
+
+    // ── Filtrage efficiente : ret >= retMinVar (après coupure gap) ───────────
+    efCands = efCands.filter(p => p.r >= retMinVar - 0.001);
+    efCands.sort((a,b) => a.v - b.v);
+
+    // ── Filtre outliers : supprimer les pics isolés ──────────────────────────
+    // Un point est un outlier si son rendement s'écarte > 2× l'écart-type local
+    // de ses voisins (fenêtre de 5 points de chaque côté)
+    if (efCands.length > 10) {
+      const OW = 5; // fenêtre outlier
+      efCands = efCands.filter((p, i) => {
+        const lo = Math.max(0, i - OW), hi = Math.min(efCands.length-1, i + OW);
+        const neighbors = [];
+        for (let j = lo; j <= hi; j++) if (j !== i) neighbors.push(efCands[j].r);
+        const mean = neighbors.reduce((a,b)=>a+b,0) / neighbors.length;
+        const std  = Math.sqrt(neighbors.reduce((a,b)=>a+(b-mean)**2,0) / neighbors.length);
+        return Math.abs(p.r - mean) <= 2.5 * std + 0.005; // tolérance absolue 0.5%
+      });
+    }
+
+    // Garantir minVar exact en premier
+    if (efCands.length > 0) {
+      const mvIdx2 = efCands.reduce((best,p,i) => p.v < efCands[best].v ? i : best, 0);
+      efCands[mvIdx2] = { v: minVarStats.vol, r: minVarStats.ret, w: minVarW };
+    }
+
+    // Tangent exact : remplacer point le plus proche en vol
+    const tVol = tangentStats.vol;
+    let tIdx = 0;
+    for (let i = 1; i < efCands.length; i++) {
+      if (Math.abs(efCands[i].v - tVol) < Math.abs(efCands[tIdx].v - tVol)) tIdx = i;
+    }
+    if (efCands.length > 0) efCands[tIdx] = { v: tVol, r: tangentStats.ret, w: tangentW };
+
+    // Lissage adaptatif : fenêtre croissante + plus large pour grand n
+    const smoothBase = isSmall ? 3 : isMedium ? 4 : 8;
+    const smoothMax  = isSmall ? 8 : isMedium ? 12 : 20;
+    const sigmaBase  = isSmall ? 1.5 : isMedium ? 2 : 4;
+    const sigmaMax   = isSmall ? 3 : isMedium ? 5 : 10;
+    const efFinal = efCands.map((p, i) => {
+      if (i === tIdx) return p;
+      const progress = i / Math.max(1, efCands.length - 1);
+      const W = Math.round(smoothBase + progress * (smoothMax - smoothBase));
+      const sigma = sigmaBase + progress * (sigmaMax - sigmaBase);
+      let sumV = 0, sumR = 0, sumWt = 0;
+      for (let j = Math.max(0, i-W); j <= Math.min(efCands.length-1, i+W); j++) {
+        const wt = Math.exp(-0.5 * Math.pow((j-i)/sigma, 2));
+        sumV += efCands[j].v * wt; sumR += efCands[j].r * wt; sumWt += wt;
+      }
+      return { v: sumV/sumWt, r: Math.max(p.r, sumR/sumWt), w: p.w };
+    });
+
+    const efVolsSorted    = efFinal.map(p => p.v);
+    const efRetsSorted    = efFinal.map(p => p.r);
+    const efWeightsSorted = efFinal.map(p => p.w);
+    // Sous-échantillonner le pool adaptatif pour l'affichage du nuage de points
+    // Ratio : pool_size / 7.5 (moitié de l'ancien coeff 15)
+    const DISPLAY_RATIO = 15;
+    const nDisplay = Math.min(appState.nSim * 2, Math.floor(pool.length / DISPLAY_RATIO));
+
+    // Partie supérieure : points adaptatifs filtrés
+    // Pour grand n, filtrer aussi les points trop éloignés de la frontière (outliers visuels)
+    let poolTop = pool.filter(p => p.r >= retMinVar - 0.001);
+    if (isLarge && efCands.length > 5) {
+      // Construire une enveloppe max-ret par bin pour filtrer les points trop bas
+      const ENV_BINS = 100;
+      const envVMin = Math.min(...poolTop.map(p=>p.v));
+      const envVMax = Math.max(...poolTop.map(p=>p.v));
+      const envBSz = (envVMax - envVMin) / ENV_BINS;
+      const envMax = new Array(ENV_BINS).fill(-Infinity);
+      for (const p of poolTop) {
+        const b = Math.min(ENV_BINS-1, Math.floor((p.v - envVMin) / envBSz));
+        if (p.r > envMax[b]) envMax[b] = p.r;
+      }
+      // Garder seulement les points dans les 60% supérieurs de chaque bin
+      poolTop = poolTop.filter(p => {
+        const b = Math.min(ENV_BINS-1, Math.floor((p.v - envVMin) / envBSz));
+        return p.r >= envMax[b] * 0.55 + retMinVar * 0.45;
+      });
+    }
+    const poolShuffledTop = [...poolTop].sort(() => Math.random() - 0.5);
+    const displayTop = poolShuffledTop.slice(0, nDisplay);
+
+    // Partie inférieure (ret < retMinVar) : puiser dans le pool adaptatif (couvre toute la vol)
+    // + simulations MC de base pour les zones non couvertes par le pool
+    const poolBottomAdaptive = pool.filter(p => p.r < retMinVar - 0.001);
+    const poolBottomMC = simVols.map((v,i) => ({ v, r: simRets[i], w: simWeightsAll[i] }))
+      .filter(p => p.r < retMinVar - 0.001);
+    const poolBottom = [...poolBottomAdaptive, ...poolBottomMC];
+    const nBottom = Math.floor(nDisplay * 0.30); // 30% de points pour le bas
+    // Sous-échantillonnage uniforme en vol pour bien couvrir toute la largeur
+    poolBottom.sort((a,b) => a.v - b.v);
+    const displayBottom = [];
+    const bottomStep = Math.max(1, Math.floor(poolBottom.length / nBottom));
+    for (let i = 0; i < poolBottom.length && displayBottom.length < nBottom; i += bottomStep) {
+      displayBottom.push(poolBottom[i]);
+    }
+
+    const displayPts = [...displayTop, ...displayBottom];
+
+    // Ajouter les simulations MC filtrées PAR DESSUS (ret >= retMinVar seulement)
+    const mcFiltered = simVols
+      .map((v,i) => ({ v, r: simRets[i] }))
+      .filter(p => p.r >= retMinVar - 0.001);
+    const allDisplayPts = [...displayPts, ...mcFiltered];
+
+    const dispRets = allDisplayPts.map(p => p.r);
+    const dispVols = allDisplayPts.map(p => p.v);
+    // Sharpe pour coloration
+    const dispSharpes = allDisplayPts.map(p => (p.r - appState.rf) / (p.v + 1e-9));
+
+    appState.results = {available,allNames,n,meanRets,annMeanRets,covMatrix,annStds,retsAligned,
+      simRets: dispRets, simVols: dispVols, simSharpes: dispSharpes,
+      tangentW,tangentStats,minVarW,minVarStats,efVols:efVolsSorted,efRets:efRetsSorted,efWeights:efWeightsSorted};
+    appState.cmlExposure = 1.0;
+    renderAll();
+  } catch(e) { console.error(e); alert('Erreur : '+e.message); }
+  finally { document.getElementById('loadingOverlay').classList.remove('active'); document.getElementById('btnRun').disabled=false; }
 }
 
-// ── Render all ────────────────────────────────────────────────────────────────
+function setLoading(txt) { document.getElementById('loadingText').textContent = txt; }
+function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
+
 function renderAll() {
   const r = appState.results;
   document.getElementById('kpiBar').style.display = 'grid';
-  document.getElementById('kpiRet').textContent    = (r.tangent_stats.ret*100).toFixed(2)+' %';
-  document.getElementById('kpiVol').textContent    = (r.tangent_stats.vol*100).toFixed(2)+' %';
-  document.getElementById('kpiSharpe').textContent = r.tangent_stats.sharpe.toFixed(2);
+  document.getElementById('kpiRet').textContent = (r.tangentStats.ret*100).toFixed(2)+' %';
+  document.getElementById('kpiVol').textContent = (r.tangentStats.vol*100).toFixed(2)+' %';
+  document.getElementById('kpiSharpe').textContent = r.tangentStats.sharpe.toFixed(2);
   document.getElementById('kpiAssets').textContent = r.n;
   renderFrontier(); renderCML(); renderRiskLevels(); renderPerf();
 }
@@ -589,33 +1105,36 @@ function renderAll() {
 function renderFrontier() {
   const r = appState.results;
   document.getElementById('frontierCard').style.display = 'block';
-  const mn=Math.min(...r.sim_sharpes), mx=Math.max(...r.sim_sharpes);
-  const sharpeNorm = r.sim_sharpes.map(s => (s-mn)/(mx-mn+1e-9));
-  const cmlMaxVol = Math.max(...r.sim_vols)*1.15;
-  const cmlX = Array.from({length:80},(_,i)=>i/79*cmlMaxVol*100);
-  const slope = (r.tangent_stats.ret-appState.rf)/r.tangent_stats.vol;
-  const cmlY = cmlX.map(x=>(appState.rf+slope*(x/100))*100);
+  const mn=Math.min(...r.simSharpes), mx=Math.max(...r.simSharpes);
+  const sharpeNorm=r.simSharpes.map(s=>(s-mn)/(mx-mn+1e-9));
+  const cmlMaxVol=Math.max(...r.simVols)*1.15;
+  const cmlX=Array.from({length:80},(_,i)=>i/79*cmlMaxVol*100);
+  const slope=(r.tangentStats.ret-appState.rf)/r.tangentStats.vol;
+  const cmlY=cmlX.map(x=>(appState.rf+slope*(x/100))*100);
+
   const traces=[
-    {x:r.sim_vols.map(v=>v*100),y:r.sim_rets.map(v=>v*100),mode:'markers',type:'scatter',
+    {x:r.simVols.map(v=>v*100),y:r.simRets.map(v=>v*100),mode:'markers',type:'scatter',
      marker:{size:3.5,opacity:0.45,color:sharpeNorm,colorscale:[['0','#c4bdb0'],['0.5','#3466a0'],['1','#1a5c52']]},
      hovertemplate:'Vol. : %{x:.2f} %<br>Rend. : %{y:.2f} %<extra>Simulation</extra>'},
-    {x:r.ef_vols.map(v=>v*100),y:r.ef_rets.map(v=>v*100),mode:'lines',type:'scatter',
+    {x:r.efVols.map(v=>v*100),y:r.efRets.map(v=>v*100),mode:'lines',type:'scatter',
      line:{color:'#1e3a5f',width:2.5},
      hovertemplate:'<b>Frontière efficiente</b><br>Vol. : %{x:.2f} %<br>Rend. : %{y:.2f} %<extra></extra>'},
     {x:cmlX,y:cmlY,mode:'lines',type:'scatter',line:{color:'#c4820a',width:1.8,dash:'dot'},
      hovertemplate:'Vol. : %{x:.2f} %<br>Rend. : %{y:.2f} %<extra>CML</extra>'},
-    {x:[r.tangent_stats.vol*100],y:[r.tangent_stats.ret*100],mode:'markers',type:'scatter',
+    {x:[r.tangentStats.vol*100],y:[r.tangentStats.ret*100],mode:'markers',type:'scatter',
      marker:{size:14,color:'#c4820a',symbol:'star',line:{color:'white',width:1.5}},
-     hovertemplate:`<b>Portefeuille tangent</b><br>Vol. : ${(r.tangent_stats.vol*100).toFixed(2)} %<br>Rend. : ${(r.tangent_stats.ret*100).toFixed(2)} %<br>Sharpe : ${r.tangent_stats.sharpe.toFixed(2)}<extra></extra>`},
-    {x:[r.min_var_stats.vol*100],y:[r.min_var_stats.ret*100],mode:'markers',type:'scatter',
+     hovertemplate:`<b>Portefeuille tangent</b><br>Vol. : ${(r.tangentStats.vol*100).toFixed(2)} %<br>Rend. : ${(r.tangentStats.ret*100).toFixed(2)} %<br>Sharpe : ${r.tangentStats.sharpe.toFixed(2)}<extra></extra>`},
+    {x:[r.minVarStats.vol*100],y:[r.minVarStats.ret*100],mode:'markers',type:'scatter',
      marker:{size:11,color:'#1a5c52',symbol:'diamond',line:{color:'white',width:1.5}},
-     hovertemplate:`<b>Variance minimale</b><br>Vol. : ${(r.min_var_stats.vol*100).toFixed(2)} %<br>Rend. : ${(r.min_var_stats.ret*100).toFixed(2)} %<extra></extra>`},
+     hovertemplate:`<b>Variance minimale</b><br>Vol. : ${(r.minVarStats.vol*100).toFixed(2)} %<br>Rend. : ${(r.minVarStats.ret*100).toFixed(2)} %<extra></extra>`},
     {x:[0],y:[appState.rf*100],mode:'markers',type:'scatter',
      marker:{size:9,color:'#7a1f2e',symbol:'circle',line:{color:'white',width:1.5}},
      hovertemplate:`Taux sans risque : ${(appState.rf*100).toFixed(2)} %<extra></extra>`},
   ];
+
   Plotly.react('frontierChart', traces, plotLayout(), TOOLBAR);
-  document.getElementById('frontierLegend').innerHTML=`
+
+  document.getElementById('frontierLegend').innerHTML = `
     <div class="legend-title">Légende</div>
     <div class="legend-item"><div class="legend-line" style="background:#1e3a5f"></div>Frontière efficiente</div>
     <div class="legend-item"><div class="legend-line-dashed" style="color:#c4820a;width:22px"></div>Capital Market Line</div>
@@ -630,45 +1149,1095 @@ function renderFrontier() {
 function renderCML() {
   const r = appState.results;
   document.getElementById('cmlCard').style.display = 'block';
-  const exp = appState.cmlExposure;
-  const mixRet = (1-exp)*appState.rf + exp*r.tangent_stats.ret;
-  const mixVol = Math.abs(exp)*r.tangent_stats.vol;
-  updateCMLControls(exp, mixRet, mixVol);
-  const xT=r.tangent_stats.vol*100, xMax=r.tangent_stats.vol*2.2*100;
-  const slope=(r.tangent_stats.ret-appState.rf)/r.tangent_stats.vol;
+  const exp=appState.cmlExposure;
+  const mixRet=(1-exp)*appState.rf+exp*r.tangentStats.ret;
+  const mixVol=Math.abs(exp)*r.tangentStats.vol;
+  updateCMLControls(exp,mixRet,mixVol);
+
+  const xT=r.tangentStats.vol*100, xMax=r.tangentStats.vol*2.2*100;
+  const slope=(r.tangentStats.ret-appState.rf)/r.tangentStats.vol;
   const xSafe=Array.from({length:50},(_,i)=>i/49*xT);
   const ySafe=xSafe.map(x=>(appState.rf+slope*x/100)*100);
   const xLev=Array.from({length:50},(_,i)=>xT+i/49*(xMax-xT));
   const yLev=xLev.map(x=>(appState.rf+slope*x/100)*100);
+
   const traces=[
-    {x:r.ef_vols.map(v=>v*100),y:r.ef_rets.map(v=>v*100),mode:'lines',type:'scatter',line:{color:'rgba(30,58,95,0.2)',width:1.5},hoverinfo:'skip'},
-    {x:xSafe,y:ySafe,mode:'lines',type:'scatter',line:{color:'#1a5c52',width:2.5},hovertemplate:'Vol. : %{x:.2f} %<br>Rend. : %{y:.2f} %<extra>CML sans levier</extra>'},
-    {x:xLev,y:yLev,mode:'lines',type:'scatter',line:{color:'#7a1f2e',width:2.5,dash:'dot'},hovertemplate:'Vol. : %{x:.2f} %<br>Rend. : %{y:.2f} %<extra>CML avec levier</extra>'},
-    {x:[r.tangent_stats.vol*100],y:[r.tangent_stats.ret*100],mode:'markers',type:'scatter',marker:{size:14,color:'#c4820a',symbol:'star',line:{color:'white',width:1.5}},hovertemplate:`<b>Portefeuille tangent</b><br>Sharpe : ${r.tangent_stats.sharpe.toFixed(2)}<extra></extra>`},
-    {x:[0],y:[appState.rf*100],mode:'markers',type:'scatter',marker:{size:9,color:'#7a1f2e',symbol:'circle',line:{color:'white',width:1.5}}},
-    {x:[mixVol*100],y:[mixRet*100],mode:'markers',type:'scatter',marker:{size:18,color:'white',symbol:'circle',line:{color:exp>1?'#7a1f2e':'#1a5c52',width:3}},hovertemplate:`<b>Votre portefeuille</b><br>Rend. : ${(mixRet*100).toFixed(2)} %<br>Vol. : ${(mixVol*100).toFixed(2)} %<br>Exposition : ${(exp*100).toFixed(0)} %<extra></extra>`},
+    {x:r.efVols.map(v=>v*100),y:r.efRets.map(v=>v*100),mode:'lines',type:'scatter',
+     line:{color:'rgba(30,58,95,0.2)',width:1.5},hoverinfo:'skip'},
+    {x:xSafe,y:ySafe,mode:'lines',type:'scatter',line:{color:'#1a5c52',width:2.5},
+     hovertemplate:'Vol. : %{x:.2f} %<br>Rend. : %{y:.2f} %<extra>CML sans levier</extra>'},
+    {x:xLev,y:yLev,mode:'lines',type:'scatter',line:{color:'#7a1f2e',width:2.5,dash:'dot'},
+     hovertemplate:'Vol. : %{x:.2f} %<br>Rend. : %{y:.2f} %<extra>CML avec levier</extra>'},
+    {x:[r.tangentStats.vol*100],y:[r.tangentStats.ret*100],mode:'markers',type:'scatter',
+     marker:{size:14,color:'#c4820a',symbol:'star',line:{color:'white',width:1.5}},
+     hovertemplate:`<b>Portefeuille tangent</b><br>Sharpe : ${r.tangentStats.sharpe.toFixed(2)}<extra></extra>`},
+    {x:[0],y:[appState.rf*100],mode:'markers',type:'scatter',
+     marker:{size:9,color:'#7a1f2e',symbol:'circle',line:{color:'white',width:1.5}}},
+    // Draggable — index 5
+    {x:[mixVol*100],y:[mixRet*100],mode:'markers',type:'scatter',
+     marker:{size:18,color:'white',symbol:'circle',line:{color:exp>1?'#7a1f2e':'#1a5c52',width:3}},
+     hovertemplate:`<b>Votre portefeuille</b><br>Rend. : ${(mixRet*100).toFixed(2)} %<br>Vol. : ${(mixVol*100).toFixed(2)} %<br>Exposition : ${(exp*100).toFixed(0)} %<extra></extra>`},
   ];
-  const layout=plotLayout(); layout.dragmode=false;
+
+  const layout = plotLayout(); layout.dragmode = false;
   Plotly.react('cmlChart', traces, layout, TOOLBAR);
-  document.getElementById('cmlLegend').innerHTML=`
+
+  document.getElementById('cmlLegend').innerHTML = `
     <div class="legend-title">Légende</div>
     <div class="legend-item"><div class="legend-line" style="background:#1a5c52"></div>CML — sans levier</div>
     <div class="legend-item"><div class="legend-line-dashed" style="color:#7a1f2e;width:22px"></div>CML — avec levier</div>
     <div class="legend-item"><span style="color:#c4820a;font-size:14px">★</span>Portefeuille tangent</div>
     <div class="legend-item"><span style="color:#7a1f2e;font-size:14px">●</span>Taux sans risque</div>
-    <div class="legend-item" style="margin-top:4px"><div style="width:16px;height:16px;border-radius:50%;border:3px solid #1a5c52;background:white;flex-shrink:0"></div>Votre portefeuille</div>`;
+    <div class="legend-item" style="margin-top:4px">
+      <div style="width:16px;height:16px;border-radius:50%;border:3px solid #1a5c52;background:white;flex-shrink:0"></div>Votre portefeuille
+    </div>`;
+
   setupDraggablePoint();
   renderCMLAlloc();
 }
 
 function updateCMLControls(exp, mixRet, mixVol) {
   const mixSharpe = mixVol>0?(mixRet-appState.rf)/mixVol:0;
+  // Update inputs (new editable cards)
   const retInp = document.getElementById('mixRetInp');
   const volInp = document.getElementById('mixVolInp');
-  if(retInp) { retInp.textContent=(mixRet*100).toFixed(2); retInp.style.color=mixRet>=0?'var(--teal)':'var(--rose)'; }
-  if(volInp) volInp.textContent=(mixVol*100).toFixed(2);
-  document.getElementById('mixSharpe').textContent=mixSharpe.toFixed(2);
+  if(retInp) { retInp.textContent = (mixRet*100).toFixed(2); retInp.style.color = mixRet>=0?'var(--teal)':'var(--rose)'; }
+  if(volInp) volInp.textContent = (mixVol*100).toFixed(2);
+  document.getElementById('mixSharpe').textContent = mixSharpe.toFixed(2);
   updateCMLBarLabels(exp);
+}
+
+let isDragging = false;
+function setupDraggablePoint() {
+  const chartDiv = document.getElementById('cmlChart');
+  if(chartDiv._draggableSetup) return;
+  chartDiv._draggableSetup = true;
+
+  chartDiv.addEventListener('mousedown', e => {
+    const coords=getPlotCoords(e.clientX,e.clientY);
+    if(!coords) return; isDragging=true; snapToCML(coords.x); e.preventDefault();
+  });
+  document.addEventListener('mousemove', e => {
+    if(!isDragging) return;
+    const coords=getPlotCoords(e.clientX,e.clientY);
+    if(coords) snapToCML(coords.x); e.preventDefault();
+  });
+  document.addEventListener('mouseup', ()=>{isDragging=false;});
+  chartDiv.addEventListener('touchstart', e=>{
+    const t=e.touches[0];const coords=getPlotCoords(t.clientX,t.clientY);
+    if(!coords)return;isDragging=true;snapToCML(coords.x);e.preventDefault();
+  },{passive:false});
+  document.addEventListener('touchmove', e=>{
+    if(!isDragging)return;const t=e.touches[0];
+    const coords=getPlotCoords(t.clientX,t.clientY);if(coords)snapToCML(coords.x);e.preventDefault();
+  },{passive:false});
+  document.addEventListener('touchend',()=>{isDragging=false;});
+  chartDiv.style.cursor = 'crosshair';
+}
+
+function getPlotCoords(clientX, clientY) {
+  const chartDiv=document.getElementById('cmlChart');
+  const fl=chartDiv._fullLayout; if(!fl) return null;
+  const rect=chartDiv.getBoundingClientRect();
+  const l=fl.margin.l+rect.left, t=fl.margin.t+rect.top;
+  const w=fl.xaxis._length, h=fl.yaxis._length;
+  const px=clientX-l, py=clientY-t;
+  if(px<0||px>w||py<0||py>h) return null;
+  return {
+    x:fl.xaxis.range[0]+(px/w)*(fl.xaxis.range[1]-fl.xaxis.range[0]),
+    y:fl.yaxis.range[1]+(py/h)*(fl.yaxis.range[0]-fl.yaxis.range[1]),
+  };
+}
+
+function snapToCML(xVol_pct) {
+  const r=appState.results; if(!r) return;
+  const maxVol=r.tangentStats.vol*2.2;
+  const clampedVol=Math.max(0,Math.min(xVol_pct/100,maxVol));
+  const exp=clampedVol/r.tangentStats.vol;
+  appState.cmlExposure=exp;
+  const mixRet=(1-exp)*appState.rf+exp*r.tangentStats.ret;
+  const mixVol=Math.abs(exp)*r.tangentStats.vol;
+  updateCMLControls(exp,mixRet,mixVol);
+  Plotly.restyle('cmlChart',{x:[[mixVol*100]],y:[[mixRet*100]],'marker.line.color':[exp>1?'#7a1f2e':'#1a5c52']},[5]);
+  renderCMLAlloc();
+}
+
+function renderCMLAlloc() {
+  const r=appState.results; const exp=appState.cmlExposure;
+  const alloc=r.tangentW.map((w,i)=>({name:r.allNames[i],ticker:r.available[i],wT:w,wTot:w*exp}))
+    .sort((a,b)=>b.wTot-a.wTot).filter(a=>a.wT>0.005);
+
+  const rfPart   = Math.max(0, (1-exp)*100);      // Trésorerie (exp < 1)
+  const levPart  = Math.max(0, (exp-1)*100);       // Emprunt (exp > 1)
+  const hasRf    = rfPart  > 0.05;
+  const hasLev   = levPart > 0.05;
+
+  // ── Tableau ──────────────────────────────────────────────────────────────
+  let html = `<table class="alloc-table">
+    <thead><tr>
+      <th>Actif</th>
+      <th style="text-align:right">Poids tangent</th>
+      <th style="text-align:right">Exposition totale</th>
+    </tr></thead><tbody>`;
+
+  // Ligne Trésorerie
+  if (hasRf) html += `<tr>
+    <td><strong>Trésorerie</strong><br><span style="color:var(--muted2);font-size:0.65rem">Cash / Rf</span></td>
+    <td style="text-align:right;color:var(--teal)">—</td>
+    <td style="text-align:right;color:var(--teal)">${rfPart.toFixed(1)} %</td></tr>`;
+
+  // Lignes actifs
+  for(const a of alloc) html += `<tr>
+    <td><strong>${a.name}</strong><br><span style="color:var(--muted2);font-size:0.65rem">${a.ticker}</span></td>
+    <td style="text-align:right;color:var(--amber)">${(a.wT*100).toFixed(1)} %</td>
+    <td style="text-align:right;color:var(--blue)">${(a.wTot*100).toFixed(1)} %</td></tr>`;
+
+  // Ligne Emprunt
+  if (hasLev) html += `<tr>
+    <td><strong>Emprunt</strong><br><span style="color:var(--muted2);font-size:0.65rem">Levier financier</span></td>
+    <td style="text-align:right;color:var(--rose)">—</td>
+    <td style="text-align:right;color:var(--rose)">−${levPart.toFixed(1)} %</td></tr>`;
+
+  // Ligne Total
+  html += `<tr style="border-top:1px solid var(--border);font-weight:600">
+    <td>Total</td>
+    <td style="text-align:right;color:var(--muted)">${(exp<=1?exp*100:100).toFixed(0)} %</td>
+    <td style="text-align:right;color:var(--ink)">${(exp*100).toFixed(0)} %</td></tr>`;
+
+  document.getElementById('cmlAllocTable').innerHTML = html + '</tbody></table>';
+
+  // ── Camembert ─────────────────────────────────────────────────────────────
+  const pieLabels = alloc.map(a => a.name);
+  const pieValues = alloc.map(a => Math.abs(a.wTot) * 100);
+  const pieColors = alloc.map((_,i) => `hsl(${200+i*22},40%,${45+i%3*8}%)`);
+
+  if (hasRf) {
+    pieLabels.unshift('Trésorerie');
+    pieValues.unshift(rfPart);
+    pieColors.unshift('#1a5c52');  // vert sapin
+  }
+  if (hasLev) {
+    pieLabels.push('Emprunt');
+    pieValues.push(levPart);
+    pieColors.push('#7a1f2e');     // bordeaux
+  }
+
+  Plotly.react('cmlPieChart', [{
+    type:'pie', labels:pieLabels, values:pieValues, hole:0.42,
+    marker:{colors:pieColors, line:{color:'white',width:1}},
+    textinfo:'percent',
+    hovertemplate:'<b>%{label}</b><br>%{value:.1f} %<extra></extra>',
+    textfont:{color:'white',size:10}
+  }], {
+    paper_bgcolor:'transparent', plot_bgcolor:'transparent',
+    showlegend:false, margin:{l:10,r:10,t:10,b:10},
+    font:{color:'#3d3830',family:'DM Sans, sans-serif'}
+  }, {responsive:true, displayModeBar:false});
+}
+
+const RISK_LEVELS=[
+  {
+    label: 'Défensif', frac: 0.00,
+    qual: 'Capital préservé en priorité. Convient à un horizon court ou une faible tolérance aux pertes.',
+    math: "Portefeuille à variance minimale : w* = arg min w'Σw sous Σwᵢ=1, wᵢ≥0. Aucune contrainte de rendement."
+  },
+  {
+    label: 'Modéré', frac: 0.25,
+    qual: 'Légère prise de risque pour améliorer le rendement. Bon équilibre pour un horizon moyen terme.',
+    math: 'Vol cible = σ_min + 25% × (σ_tangent − σ_min). Point à 1/4 entre variance minimale et portefeuille tangent.'
+  },
+  {
+    label: 'Équilibré', frac: 0.50,
+    qual: 'Compromis rendement/risque centré. Adapté à un investisseur long terme sans contrainte de liquidité immédiate.',
+    math: 'Vol cible = σ_min + 50% × (σ_tangent − σ_min). Point médian entre variance minimale et portefeuille tangent.'
+  },
+  {
+    label: 'Dynamique', frac: 0.75,
+    qual: 'Priorité au rendement avec un risque élevé assumé. Horizon long terme, tolérance aux drawdowns importants.',
+    math: 'Vol cible = σ_min + 75% × (σ_tangent − σ_min). Proche du portefeuille tangent, forte concentration.'
+  },
+  {
+    label: 'Agressif', frac: 1.00,
+    qual: 'Maximisation du rendement attendu sans contrainte de risque. Concentration maximale sur le meilleur actif.',
+    math: "Portefeuille tangent exact : w* = arg max (μ-rf)/σ. Maximise le ratio de Sharpe. Identique au portefeuille de la CML interactive à exposition 100%." 
+  },
+];
+
+function renderRiskLevels() {
+  document.getElementById('riskCard').style.display='block';
+  const tabs=document.getElementById('riskTabs'); tabs.innerHTML='';
+  RISK_LEVELS.forEach((lvl,i)=>{
+    // Wrapper: button + tooltip
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:inline-flex;align-items:center;gap:0';
+
+    const btn=document.createElement('button');
+    btn.className='risk-tab'+(i===0?' active':'');
+    btn.textContent=lvl.label;
+    btn.onclick=()=>{
+      document.querySelectorAll('.risk-tab').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderRiskContent(i);
+    };
+
+    // Tooltip
+    const tipWrap = document.createElement('span');
+    tipWrap.className = 'risk-tooltip-wrap';
+    tipWrap.innerHTML = `
+      <span class="risk-help-btn" tabindex="0">?</span>
+      <div class="risk-tooltip-box">
+        <strong>${lvl.label}</strong>
+        ${lvl.qual}
+        <div class="tooltip-math">${lvl.math}</div>
+      </div>`;
+
+    wrap.appendChild(btn);
+    wrap.appendChild(tipWrap);
+    tabs.appendChild(wrap);
+  });
+  // Custom button
+  const customBtn=document.createElement('button');
+  customBtn.className='risk-tab custom';
+  customBtn.textContent='Personnalisé';
+  customBtn.onclick=()=>{
+    document.querySelectorAll('.risk-tab').forEach(b=>b.classList.remove('active'));
+    customBtn.classList.add('active');
+    renderCustomRisk();
+  };
+  tabs.appendChild(customBtn);
+  renderRiskContent(0);
+}
+
+// ── Shared helper: render alloc table + pie ──────────────────────────────────
+function renderRiskAlloc(w, stats, containerSel, pieDivId) {
+  const r=appState.results;
+  const alloc=r.allNames.map((name,i)=>({name,ticker:r.available[i],w:w[i]}))
+    .sort((a,b)=>b.w-a.w).filter(a=>a.w>0.005);
+
+  document.getElementById(containerSel).innerHTML=`
+    <div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">
+        <div class="kpi-card teal" style="padding:12px"><div class="kpi-label">Rendement</div><div class="kpi-value teal" style="font-size:1.2rem">${(stats.ret*100).toFixed(2)} %</div></div>
+        <div class="kpi-card amber" style="padding:12px"><div class="kpi-label">Volatilité</div><div class="kpi-value amber" style="font-size:1.2rem">${(stats.vol*100).toFixed(2)} %</div></div>
+        <div class="kpi-card blue" style="padding:12px"><div class="kpi-label">Ratio de Sharpe</div><div class="kpi-value blue" style="font-size:1.2rem">${stats.sharpe.toFixed(2)}</div></div>
+        <div class="kpi-card rose" style="padding:12px"><div class="kpi-label">Actifs</div><div class="kpi-value rose" style="font-size:1.2rem">${alloc.length}</div></div>
+      </div>
+      <table class="alloc-table"><thead><tr><th>Actif</th><th>Poids</th><th style="width:80px"></th></tr></thead>
+      <tbody>${alloc.map(a=>`<tr>
+        <td><strong>${a.name}</strong><br><span style="color:var(--muted2);font-size:0.65rem">${a.ticker}</span></td>
+        <td style="color:var(--amber)">${(a.w*100).toFixed(1)} %</td>
+        <td><div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:${Math.min(100,a.w*100)}%"></div></div></td>
+      </tr>`).join('')}</tbody></table>
+    </div>
+    <div id="${pieDivId}" style="height:300px"></div>`;
+
+  const colors=alloc.map((_,i)=>`hsl(${200+i*22},40%,${45+i%3*8}%)`);
+  Plotly.react(pieDivId,[{type:'pie',labels:alloc.map(a=>a.name),values:alloc.map(a=>a.w*100),hole:0.42,
+    marker:{colors,line:{color:'white',width:1}},textinfo:'percent',
+    hovertemplate:'<b>%{label}</b><br>%{value:.1f} %<extra></extra>',textfont:{color:'white',size:10}}],
+    {paper_bgcolor:'transparent',plot_bgcolor:'transparent',showlegend:false,margin:{l:10,r:10,t:10,b:10},
+     font:{color:'#3d3830',family:'DM Sans, sans-serif'}},{responsive:true,displayModeBar:false});
+}
+
+function renderRiskContent(idx) {
+  const r=appState.results; const lvl=RISK_LEVELS[idx];
+  let w, stats;
+
+  if (lvl.frac === 1.00) {
+    // Agressif = portefeuille tangent exact (max Sharpe)
+    w = r.tangentW;
+    stats = r.tangentStats;
+  } else if (lvl.frac === 0.00) {
+    // Défensif = variance minimale exacte
+    w = r.minVarW;
+    stats = r.minVarStats;
+  } else {
+    // Autres : point sur la frontière efficiente
+    const targetVol = r.minVarStats.vol + lvl.frac * (r.tangentStats.vol - r.minVarStats.vol);
+    const efIdx = r.efVols.reduce((best,v,i) =>
+      Math.abs(v-targetVol) < Math.abs(r.efVols[best]-targetVol) ? i : best, 0);
+    w = r.efWeights[efIdx];
+    stats = portfolioStats(w, r.meanRets, r.covMatrix, appState.rf);
+  }
+  renderRiskAlloc(w, stats, 'riskContent', 'riskPieDiv');
+}
+
+// ── CUSTOM RISK TAB ───────────────────────────────────────────────────────────
+function renderCustomRisk() {
+  const r = appState.results;
+  // Default: use tangent portfolio values as placeholders
+  const defStats = r.tangentStats;
+
+  document.getElementById('riskContent').innerHTML = `
+    <div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:14px;font-style:italic">
+        Cliquez sur une valeur pour la modifier. Les autres s'ajusteront automatiquement.
+      </div>
+      <div class="custom-inputs">
+        <div class="custom-kpi-card teal" id="cc-ret" onclick="startCustomEdit('ret')">
+          <div class="kpi-label">Rendement souhaité</div>
+          <div class="kpi-value teal" style="font-size:1.2rem" id="cc-ret-val">
+            <input class="custom-input-field" id="inp-ret" type="number" step="0.01"
+              placeholder="${(defStats.ret*100).toFixed(2)}"
+              style="color:var(--teal)"
+              oninput="solveCustom('ret')" onchange="solveCustom('ret')"/>
+            <span id="cc-ret-unit" style="font-size:0.85rem;margin-left:2px">%</span>
+          </div>
+        </div>
+        <div class="custom-kpi-card amber" id="cc-vol" onclick="startCustomEdit('vol')">
+          <div class="kpi-label">Volatilité souhaitée</div>
+          <div class="kpi-value amber" style="font-size:1.2rem" id="cc-vol-val">
+            <input class="custom-input-field" id="inp-vol" type="number" step="0.01"
+              placeholder="${(defStats.vol*100).toFixed(2)}"
+              style="color:var(--amber)"
+              oninput="solveCustom('vol')" onchange="solveCustom('vol')"/>
+            <span id="cc-vol-unit" style="font-size:0.85rem;margin-left:2px">%</span>
+          </div>
+        </div>
+        <div class="custom-kpi-card blue" id="cc-sharpe" onclick="startCustomEdit('sharpe')">
+          <div class="kpi-label">Ratio de Sharpe</div>
+          <div class="kpi-value blue" style="font-size:1.2rem" id="cc-sharpe-val">
+            <input class="custom-input-field" id="inp-sharpe" type="number" step="0.01"
+              placeholder="${defStats.sharpe.toFixed(2)}"
+              style="color:var(--blue)"
+              oninput="solveCustom('sharpe')" onchange="solveCustom('sharpe')"/>
+          </div>
+        </div>
+        <div class="kpi-card rose" style="padding:12px;cursor:default">
+          <div class="kpi-label">Actifs optimaux</div>
+          <div class="kpi-value rose" style="font-size:1.2rem" id="cc-nassets">—</div>
+        </div>
+      </div>
+      <div id="customAllocLeft"></div>
+    </div>
+    <div id="customPie" style="height:300px;"></div>`;
+}
+
+let customActiveField = null;
+
+function startCustomEdit(field) {
+  // All fields always active — just focus + highlight clicked card
+  ['ret','vol','sharpe'].forEach(f => {
+    const card = document.getElementById('cc-'+f);
+    if (card) card.classList.toggle('editing', f === field);
+  });
+  const inp = document.getElementById('inp-'+field);
+  if (inp) { inp.focus(); inp.select(); }
+  customActiveField = field;
+}
+
+let _solvingCustom = false;
+function solveCustom(field) {
+  if (_solvingCustom) return; // prevent loop when updating sibling fields
+  const r = appState.results;
+  const rawVal = parseFloat(document.getElementById('inp-'+field).value);
+  if (isNaN(rawVal)) return;
+
+  const efVols   = r.efVols;
+  const efRets   = r.efRets;
+  const efWeights = r.efWeights;
+  const efSharpes = efVols.map((v,i) => v > 0 ? (efRets[i] - appState.rf) / v : 0);
+
+  // ── Bounds from the efficient frontier ──────────────────────────────────
+  const maxVol    = Math.max(...efVols);
+  const minVol    = Math.min(...efVols);
+  const maxRet    = Math.max(...efRets);
+  const minRet    = Math.min(...efRets);
+  const maxSharpe = Math.max(...efSharpes);
+  const minSharpe = Math.min(...efSharpes);
+
+  let clampedVal = rawVal;
+  let clamped = false;
+
+  if (field === 'vol') {
+    const lo = minVol * 100, hi = maxVol * 100;
+    if (rawVal > hi) { clampedVal = hi; clamped = true; }
+    if (rawVal < lo) { clampedVal = lo; clamped = true; }
+  } else if (field === 'ret') {
+    const lo = minRet * 100, hi = maxRet * 100;
+    if (rawVal > hi) { clampedVal = hi; clamped = true; }
+    if (rawVal < lo) { clampedVal = lo; clamped = true; }
+  } else if (field === 'sharpe') {
+    if (rawVal > maxSharpe) { clampedVal = maxSharpe; clamped = true; }
+    if (rawVal < minSharpe) { clampedVal = minSharpe; clamped = true; }
+  }
+
+  // Replace input value with clamped value (visual feedback)
+  if (clamped) {
+    const inp = document.getElementById('inp-'+field);
+    inp.value = field === 'sharpe' ? clampedVal.toFixed(2) : clampedVal.toFixed(2);
+    inp.style.color = 'var(--rose)';
+    setTimeout(() => { inp.style.color = field==='vol'?'var(--amber)':field==='ret'?'var(--teal)':'var(--blue)'; }, 900);
+  }
+
+  // ── Snap to exact tangent or minVar if input is within 0.05% of them ──
+  const tangentVol   = r.tangentStats.vol   * 100;
+  const tangentRet   = r.tangentStats.ret   * 100;
+  const tangentSh    = r.tangentStats.sharpe;
+  const minVarVol    = r.minVarStats.vol    * 100;
+  const minVarRet    = r.minVarStats.ret    * 100;
+  const minVarSh     = r.minVarStats.sharpe;
+  const snapTol      = 0.15; // % tolerance for snapping
+
+  let w, stats;
+
+  const nearTangent =
+    (field === 'vol'    && Math.abs(clampedVal - tangentVol) < snapTol) ||
+    (field === 'ret'    && Math.abs(clampedVal - tangentRet) < snapTol) ||
+    (field === 'sharpe' && Math.abs(clampedVal - tangentSh)  < snapTol);
+
+  const nearMinVar =
+    (field === 'vol'    && Math.abs(clampedVal - minVarVol) < snapTol) ||
+    (field === 'ret'    && Math.abs(clampedVal - minVarRet) < snapTol) ||
+    (field === 'sharpe' && Math.abs(clampedVal - minVarSh)  < snapTol);
+
+  if (nearTangent) {
+    w = r.tangentW; stats = r.tangentStats;
+  } else if (nearMinVar) {
+    w = r.minVarW; stats = r.minVarStats;
+  } else {
+    // ── Dichotomie exacte sur α ∈ [0,1] ─────────────────────────────────────
+    // w(α) = (1-α)·wMinVar + α·wTangent
+    // vol(α) quadratique, ret(α) linéaire, sharpe(α) monotone
+    // Dichotomie 64 itérations → précision 2^-64 ≈ 5×10^-20 : parfaitement continu
+
+    const wMV = r.minVarW, wT = r.tangentW;
+    const t   = field === 'sharpe' ? clampedVal : clampedVal / 100;
+
+    const evalAlpha = a => {
+      const wk = wMV.map((v,i) => (1-a)*v + a*wT[i]);
+      return portfolioStats(wk, r.meanRets, r.covMatrix, appState.rf);
+    };
+
+    // Signe de f(a) = metric(a) - t
+    const metric = s => field === 'vol' ? s.vol : field === 'ret' ? s.ret : s.sharpe;
+    const f = a => metric(evalAlpha(a)) - t;
+
+    // S'assurer que f(0) et f(1) encadrent 0
+    const f0 = f(0), f1 = f(1);
+    let alpha;
+    if (f0 * f1 > 0) {
+      // Cible hors plage → prendre l'extrémité la plus proche
+      alpha = Math.abs(f0) < Math.abs(f1) ? 0 : 1;
+    } else {
+      let lo = 0, hi = 1;
+      for (let iter = 0; iter < 64; iter++) {
+        const mid = (lo + hi) / 2;
+        if (f(mid) * f0 <= 0) hi = mid; else lo = mid;
+      }
+      alpha = (lo + hi) / 2;
+    }
+
+    alpha = Math.max(0, Math.min(1, alpha));
+    const wInterp = wMV.map((v,i) => (1-alpha)*v + alpha*wT[i]);
+    const wSum = wInterp.reduce((s,v) => s + Math.max(0,v), 0);
+    w = wInterp.map(v => Math.max(0,v) / wSum);
+    stats = portfolioStats(w, r.meanRets, r.covMatrix, appState.rf);
+  }
+
+  // Update the other two fields — guard against re-triggering oninput
+  _solvingCustom = true;
+  if (field !== 'ret')    document.getElementById('inp-ret').value    = (stats.ret*100).toFixed(2);
+  if (field !== 'vol')    document.getElementById('inp-vol').value    = (stats.vol*100).toFixed(2);
+  if (field !== 'sharpe') document.getElementById('inp-sharpe').value = stats.sharpe.toFixed(2);
+  _solvingCustom = false;
+
+  // Asset count
+  const alloc = r.allNames.map((name,i) => ({name, ticker:r.available[i], w:w[i]})).filter(a => a.w > 0.005);
+  document.getElementById('cc-nassets').textContent = alloc.length;
+
+  // Alloc table
+  const sortedAlloc = [...alloc].sort((a,b) => b.w - a.w);
+  document.getElementById('customAllocLeft').innerHTML = `
+    <table class="alloc-table"><thead><tr><th>Actif</th><th>Poids</th><th style="width:80px"></th></tr></thead>
+    <tbody>${sortedAlloc.map(a => `<tr>
+      <td><strong>${a.name}</strong><br><span style="color:var(--muted2);font-size:0.65rem">${a.ticker}</span></td>
+      <td style="color:var(--amber)">${(a.w*100).toFixed(1)} %</td>
+      <td><div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:${Math.min(100,a.w*100)}%"></div></div></td>
+    </tr>`).join('')}</tbody></table>`;
+
+  // Pie
+  const colors = sortedAlloc.map((_,i) => `hsl(${200+i*22},40%,${45+i%3*8}%)`);
+  Plotly.react('customPie', [{
+    type:'pie', labels:sortedAlloc.map(a=>a.name), values:sortedAlloc.map(a=>a.w*100),
+    hole:0.42, marker:{colors, line:{color:'white',width:1}},
+    textinfo:'percent', hovertemplate:'<b>%{label}</b><br>%{value:.1f} %<extra></extra>',
+    textfont:{color:'white', size:10}
+  }], {
+    paper_bgcolor:'transparent', plot_bgcolor:'transparent',
+    showlegend:false, margin:{l:10,r:10,t:10,b:10},
+    font:{color:'#3d3830', family:'DM Sans, sans-serif'}
+  }, {responsive:true, displayModeBar:false});
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// ETF EQUIVALENT — Bibliothèque + optimisation
+// ════════════════════════════════════════════════════════════════════════════
+
+const ETF_LIBRARY = [
+  // ── Actions US large cap ──
+  { ticker:'SPY',   name:'SPDR S&P 500',                   cat:'Actions US' },
+  { ticker:'IVV',   name:'iShares Core S&P 500',           cat:'Actions US' },
+  { ticker:'VOO',   name:'Vanguard S&P 500',               cat:'Actions US' },
+  { ticker:'QQQ',   name:'Invesco Nasdaq-100',             cat:'Actions US' },
+  { ticker:'VTI',   name:'Vanguard Total Stock Market',    cat:'Actions US' },
+  { ticker:'DIA',   name:'SPDR Dow Jones Industrial',      cat:'Actions US' },
+  { ticker:'RSP',   name:'Invesco S&P 500 Equal Weight',   cat:'Actions US' },
+  // ── Actions US growth / value ──
+  { ticker:'IWF',   name:'iShares Russell 1000 Growth',    cat:'Growth US' },
+  { ticker:'IWD',   name:'iShares Russell 1000 Value',     cat:'Value US' },
+  { ticker:'VUG',   name:'Vanguard Growth',                cat:'Growth US' },
+  { ticker:'VTV',   name:'Vanguard Value',                 cat:'Value US' },
+  { ticker:'MTUM',  name:'iShares MSCI USA Momentum',      cat:'Growth US' },
+  // ── Actions US small / mid cap ──
+  { ticker:'IJR',   name:'iShares Core S&P Small-Cap',     cat:'Small Cap US' },
+  { ticker:'IWM',   name:'iShares Russell 2000',           cat:'Small Cap US' },
+  { ticker:'VO',    name:'Vanguard Mid-Cap',               cat:'Mid Cap US' },
+  { ticker:'VBK',   name:'Vanguard Small-Cap Growth',      cat:'Small Cap US' },
+  // ── Secteurs US ──
+  { ticker:'XLK',   name:'Technology Select Sector',       cat:'Tech' },
+  { ticker:'XLF',   name:'Financial Select Sector',        cat:'Finance' },
+  { ticker:'XLV',   name:'Health Care Select Sector',      cat:'Santé' },
+  { ticker:'XLE',   name:'Energy Select Sector',           cat:'Énergie' },
+  { ticker:'XLY',   name:'Conso. Discret. Select',         cat:'Conso. disc.' },
+  { ticker:'XLP',   name:'Consumer Staples Select',        cat:'Conso. base' },
+  { ticker:'XLI',   name:'Industrials Select Sector',      cat:'Industrie' },
+  { ticker:'XLB',   name:'Materials Select Sector',        cat:'Matériaux' },
+  { ticker:'XLU',   name:'Utilities Select Sector',        cat:'Services pub.' },
+  { ticker:'XLRE',  name:'Real Estate Select Sector',      cat:'Immo. US' },
+  { ticker:'XLC',   name:'Comm. Services Select Sector',   cat:'Comm.' },
+  // ── Tech thématique ──
+  { ticker:'SMH',   name:'VanEck Semiconductor',           cat:'Semi-conducteurs' },
+  { ticker:'SOXX',  name:'iShares Semiconductor',          cat:'Semi-conducteurs' },
+  { ticker:'ARKK',  name:'ARK Innovation',                 cat:'Innovation' },
+  { ticker:'CIBR',  name:'First Trust Cybersecurity',      cat:'Cybersécurité' },
+  { ticker:'ROBO',  name:'Robo Global Robotics & AI',      cat:'IA & Robotique' },
+  // ── Actions monde ──
+  { ticker:'ACWI',  name:'iShares MSCI ACWI',              cat:'Actions monde' },
+  { ticker:'VT',    name:'Vanguard Total World',           cat:'Actions monde' },
+  { ticker:'URTH',  name:'iShares MSCI World',             cat:'Actions monde' },
+  // ── Actions Europe ──
+  { ticker:'VGK',   name:'Vanguard FTSE Europe',           cat:'Actions Europe' },
+  { ticker:'EZU',   name:'iShares MSCI Eurozone',          cat:'Actions Europe' },
+  { ticker:'FEZ',   name:'SPDR Euro Stoxx 50',             cat:'Actions Europe' },
+  { ticker:'EWG',   name:'iShares MSCI Germany',           cat:'Actions Europe' },
+  { ticker:'EWQ',   name:'iShares MSCI France',            cat:'Actions Europe' },
+  { ticker:'EWU',   name:'iShares MSCI United Kingdom',    cat:'Actions Europe' },
+  { ticker:'EWI',   name:'iShares MSCI Italy',             cat:'Actions Europe' },
+  // ── Actions Asie / Pacifique ──
+  { ticker:'EWJ',   name:'iShares MSCI Japan',             cat:'Actions Asie' },
+  { ticker:'EWY',   name:'iShares MSCI South Korea',       cat:'Actions Asie' },
+  { ticker:'EWT',   name:'iShares MSCI Taiwan',            cat:'Actions Asie' },
+  { ticker:'AAXJ',  name:'iShares MSCI Asia ex Japan',     cat:'Actions Asie' },
+  { ticker:'EWH',   name:'iShares MSCI Hong Kong',         cat:'Actions Asie' },
+  // ── Actions émergents ──
+  { ticker:'EEM',   name:'iShares MSCI Emerging Markets',  cat:'Émergents' },
+  { ticker:'VWO',   name:'Vanguard FTSE Emerging Markets', cat:'Émergents' },
+  { ticker:'IEMG',  name:'iShares Core MSCI Emerging',     cat:'Émergents' },
+  { ticker:'EWZ',   name:'iShares MSCI Brazil',            cat:'Émergents' },
+  { ticker:'MCHI',  name:'iShares MSCI China',             cat:'Émergents' },
+  { ticker:'INDA',  name:'iShares MSCI India',             cat:'Émergents' },
+  // ── Obligations US ──
+  { ticker:'AGG',   name:'iShares Core US Aggregate Bond', cat:'Oblig. US' },
+  { ticker:'BND',   name:'Vanguard Total Bond Market',     cat:'Oblig. US' },
+  { ticker:'TLT',   name:'iShares 20+ Year Treasury',      cat:'Oblig. LT' },
+  { ticker:'IEF',   name:'iShares 7-10 Year Treasury',     cat:'Oblig. MT' },
+  { ticker:'SHY',   name:'iShares 1-3 Year Treasury',      cat:'Oblig. CT' },
+  { ticker:'VGIT',  name:'Vanguard Intermediate Treasury', cat:'Oblig. MT' },
+  { ticker:'VGLT',  name:'Vanguard Long-Term Treasury',    cat:'Oblig. LT' },
+  { ticker:'LQD',   name:'iShares iBoxx $ IG Corp Bond',   cat:'Oblig. corp.' },
+  { ticker:'HYG',   name:'iShares iBoxx $ HY Corp Bond',   cat:'Oblig. HY' },
+  { ticker:'JNK',   name:'SPDR Bloomberg High Yield Bond', cat:'Oblig. HY' },
+  { ticker:'MBB',   name:'iShares MBS ETF',                cat:'Oblig. hypothèc.' },
+  { ticker:'TIP',   name:'iShares TIPS Bond',              cat:'Oblig. inflation' },
+  { ticker:'VTIP',  name:'Vanguard Short-Term Inflation',  cat:'Oblig. inflation' },
+  // ── Obligations monde ──
+  { ticker:'BNDX',  name:'Vanguard Total Intl Bond',       cat:'Oblig. monde' },
+  { ticker:'EMB',   name:'iShares JP Morgan EM Bond',      cat:'Oblig. émergents' },
+  { ticker:'PCY',   name:'Invesco EM Sovereign Debt',      cat:'Oblig. émergents' },
+  // ── Or & Matières premières ──
+  { ticker:'GLD',   name:'SPDR Gold Shares',               cat:'Or' },
+  { ticker:'IAU',   name:'iShares Gold Trust',             cat:'Or' },
+  { ticker:'SGOL',  name:'Aberdeen Physical Gold',         cat:'Or' },
+  { ticker:'SLV',   name:'iShares Silver Trust',           cat:'Argent' },
+  { ticker:'PDBC',  name:'Invesco Optimum Yield Cmdty',    cat:'Matières premières' },
+  { ticker:'GSG',   name:'iShares S&P GSCI Commodity',     cat:'Matières premières' },
+  { ticker:'DBC',   name:'Invesco DB Commodity',           cat:'Matières premières' },
+  { ticker:'USO',   name:'United States Oil Fund',         cat:'Pétrole' },
+  { ticker:'UNG',   name:'United States Natural Gas Fund', cat:'Gaz naturel' },
+  // ── Immobilier ──
+  { ticker:'VNQ',   name:'Vanguard Real Estate',           cat:'Immo. US' },
+  { ticker:'USRT',  name:'iShares Core US REIT',           cat:'Immo. US' },
+  { ticker:'IYR',   name:'iShares US Real Estate',         cat:'Immo. US' },
+  { ticker:'REM',   name:'iShares Mortgage Real Estate',   cat:'Immo. hypothèc.' },
+  { ticker:'VNQI',  name:'Vanguard Global ex-US Real Est.',cat:'Immo. monde' },
+  // ── Dividendes ──
+  { ticker:'VYM',   name:'Vanguard High Dividend Yield',   cat:'Dividendes' },
+  { ticker:'DVY',   name:'iShares Select Dividend',        cat:'Dividendes' },
+  { ticker:'SCHD',  name:'Schwab US Dividend Equity',      cat:'Dividendes' },
+  { ticker:'HDV',   name:'iShares Core High Dividend',     cat:'Dividendes' },
+  // ── Multi-actifs / Allocation ──
+  { ticker:'AOR',   name:'iShares Core Growth Alloc.',     cat:'Multi-actifs' },
+  { ticker:'AOM',   name:'iShares Core Moderate Alloc.',   cat:'Multi-actifs' },
+  { ticker:'AOA',   name:'iShares Core Aggressive Alloc.', cat:'Multi-actifs' },
+  { ticker:'AOK',   name:'iShares Core Conservative Alloc.',cat:'Multi-actifs' },
+  // ── Alternatifs / Volatilité ──
+  { ticker:'BTAL',  name:'AGF US Market Neutral Anti-Beta',cat:'Alternatif' },
+  { ticker:'TAIL',  name:'Cambria Tail Risk',              cat:'Alternatif' },
+  { ticker:'USMV',  name:'iShares MSCI USA Min Volatility',cat:'Faible vol.' },
+  { ticker:'SPLV',  name:'Invesco S&P 500 Low Volatility', cat:'Faible vol.' },
+  { ticker:'EFAV',  name:'iShares MSCI EAFE Min Vol',      cat:'Faible vol.' },
+  // ── Crypto / Thématique récent ──
+  { ticker:'BITO',  name:'ProShares Bitcoin Strategy',     cat:'Crypto' },
+  { ticker:'IBIT',  name:'iShares Bitcoin Trust',          cat:'Crypto' },
+  { ticker:'FBTC',  name:'Fidelity Wise Origin Bitcoin',   cat:'Crypto' },
+  { ticker:'BLOK',  name:'Amplify Transformational Data',  cat:'Blockchain' },
+  { ticker:'ICLN',  name:'iShares Global Clean Energy',    cat:'Énergie propre' },
+  { ticker:'QCLN',  name:'First Trust NASDAQ Clean Edge',  cat:'Énergie propre' },
+];
+
+// State for ETF computation
+const etfState = { targetStats: null, etfData: null };
+
+async function computeETFEquivalent() {
+  const r = appState.results;
+  if (!r) return;
+
+  // Get current risk profile stats from active tab
+  const activeTab = document.querySelector('.risk-tab.active');
+  const isCustom = activeTab && activeTab.textContent.trim() === 'Personnalisé';
+
+  // Read target from displayed KPIs
+  let targetRet, targetVol, targetSharpe;
+  if (isCustom) {
+    targetRet    = parseFloat(document.getElementById('inp-ret').value) / 100;
+    targetVol    = parseFloat(document.getElementById('inp-vol').value) / 100;
+    targetSharpe = parseFloat(document.getElementById('inp-sharpe').value);
+  } else {
+    // Read from KPI cards in riskContent
+    const kpis = document.querySelectorAll('#riskContent .kpi-value');
+    targetRet    = parseFloat(kpis[0]?.textContent) / 100 || r.tangentStats.ret;
+    targetVol    = parseFloat(kpis[1]?.textContent) / 100 || r.tangentStats.vol;
+    targetSharpe = parseFloat(kpis[2]?.textContent)        || r.tangentStats.sharpe;
+  }
+  etfState.targetStats = { ret: targetRet, vol: targetVol, sharpe: targetSharpe };
+
+  // Show loading
+  const resultDiv = document.getElementById('etfEquivResult');
+  resultDiv.style.display = 'block';
+  resultDiv.innerHTML = '<div class="etf-loading">Récupération des données ETF en cours…</div>';
+  document.getElementById('etfEquivBtn').disabled = true;
+
+  try {
+    // ── Step 1: Fetch all ETF data in parallel ──
+    const period = appState.period || 2;
+
+    const periodStr = period <= 1 ? '1y' : period <= 2 ? '2y' : period <= 5 ? '5y' : '10y';
+    const results = await Promise.allSettled(
+      ETF_LIBRARY.map(etf => fetchOneTicker(etf.ticker, periodStr)
+        .then(prices => ({ ...etf, prices }))
+        .catch(() => null)
+      )
+    );
+
+    const validETFs = results
+      .filter(r => r.status === 'fulfilled' && r.value && r.value !== null)
+      .map(r => r.value)
+      .filter(etf => etf && etf.prices && etf.prices.length >= 30);
+
+    if (validETFs.length < 2) throw new Error('Données insuffisantes pour les ETF');
+
+    resultDiv.innerHTML = '<div class="etf-loading">Optimisation en cours…</div>';
+
+    // ── Step 2: Compute clean weekly returns ──────────────────────────────────
+    const MAX_WEEKLY_RET = 0.25; // filter out |r| > 25%/week (data errors, splits)
+
+    const etfReturns = validETFs.map(etf => {
+      // Extract prices, skip nulls/zeros
+      const rawPrices = etf.prices
+        .map(p => typeof p === 'object' ? p.p : p)
+        .filter(p => p != null && p > 0);
+
+      // Compute log returns (more stable than arithmetic for annualisation)
+      const rets = [];
+      for (let i = 1; i < rawPrices.length; i++) {
+        const r = (rawPrices[i] - rawPrices[i-1]) / rawPrices[i-1];
+        // Skip aberrant values: splits, bad data, zero prices
+        if (Math.abs(r) <= MAX_WEEKLY_RET) rets.push(r);
+      }
+      return rets;
+    });
+
+    // Filter out ETFs with too few clean returns
+    const filtered = validETFs.map((etf, i) => ({ etf, rets: etfReturns[i] }))
+      .filter(x => x.rets.length >= 30);
+
+    if (filtered.length < 2) throw new Error('Données insuffisantes — moins de 2 ETF avec assez de données propres');
+
+    const validETFsFinal = filtered.map(x => x.etf);
+    const filteredReturns = filtered.map(x => x.rets);
+
+    // Align on common length (most recent observations)
+    const minLen = Math.min(...filteredReturns.map(r => r.length));
+    const aligned = filteredReturns.map(r => r.slice(r.length - minLen));
+
+    // ── Weekly mean returns + weekly covariance matrix ──────────────────────
+    // portfolioStats() multiplies internally by 52 for annualisation,
+    // so we must pass WEEKLY (not annualised) values — same convention as main code.
+    const n = validETFsFinal.length;
+
+    // Weekly arithmetic mean (same as main code: mean(rets) passed to portfolioStats)
+    const meanR = aligned.map(rets => rets.reduce((s,v) => s+v, 0) / rets.length);
+
+    // Weekly covariance (portfolioStats multiplies by 52 internally)
+    const covM = [];
+    for (let i = 0; i < n; i++) {
+      covM[i] = [];
+      for (let j = 0; j < n; j++) {
+        let c = 0;
+        for (let k = 0; k < minLen; k++) {
+          c += (aligned[i][k] - meanR[i]) * (aligned[j][k] - meanR[j]);
+        }
+        covM[i][j] = c / (minLen - 1); // weekly covariance — NOT pre-annualised
+      }
+    }
+
+    // ── Step 3: Pré-filtrage — garder les 15 ETFs individuels les plus proches ──
+    const rf = appState.rf;
+    const tVol = etfState.targetStats.vol;
+    const tRet = etfState.targetStats.ret;
+
+    // Score individuel : distance normalisée dans l'espace (vol, ret)
+    function score(vol, ret) {
+      const dVol = (vol - tVol) / (tVol + 1e-6);
+      const dRet = (ret - tRet) / (Math.abs(tRet) + 0.01);
+      return 2*dVol*dVol + dRet*dRet;
+    }
+
+    // Évaluer chaque ETF individuellement (poids=1) pour pré-trier
+    const etfIndivScores = validETFsFinal.map((etf, i) => {
+      const st = portfolioStats([1], [meanR[i]], [[covM[i][i]]], rf);
+      return { idx: i, score: score(st.vol, st.ret) };
+    });
+    etfIndivScores.sort((a, b) => a.score - b.score);
+
+    // Garder les 15 meilleurs ETFs pour les combinaisons
+    const TOP_K = 15;
+    const topIdx = etfIndivScores.slice(0, Math.min(TOP_K, n)).map(x => x.idx);
+    // Toujours garder tous les ETFs pour le test à 1 seul ETF
+    const allIdx = [...Array(n).keys()];
+
+    resultDiv.innerHTML = `<div class="etf-loading">Optimisation sur ${topIdx.length} ETF présélectionnés…</div>`;
+
+    let bestCombos = [];
+
+    for (let size = 1; size <= 3; size++) {
+      // Pour 1 ETF : tester tous ; pour 2-3 ETFs : seulement les top K pré-filtrés
+      const pool = size === 1 ? allIdx : topIdx;
+      const combos = getCombinations(pool, size);
+
+      for (const combo of combos) {
+        const subN = combo.length;
+        const subMean = combo.map(i => meanR[i]);
+        const subCov  = combo.map(i => combo.map(j => covM[i][j]));
+
+        let bestW = null, bestScore = Infinity;
+
+        // Equal weight baseline
+        const ewW = new Array(subN).fill(1/subN);
+        const ewS = portfolioStats(ewW, subMean, subCov, rf);
+        const ewSc = score(ewS.vol, ewS.ret);
+        if (ewSc < bestScore) { bestScore = ewSc; bestW = [...ewW]; }
+
+        // Monte Carlo 1000 draws
+        for (let mc = 0; mc < 1000; mc++) {
+          const raw = combo.map(() => Math.random());
+          const sum = raw.reduce((a,b) => a+b, 0);
+          const w   = raw.map(v => v/sum);
+          const st  = portfolioStats(w, subMean, subCov, rf);
+          const sc  = score(st.vol, st.ret);
+          if (sc < bestScore) { bestScore = sc; bestW = [...w]; }
+        }
+
+        if (bestW) {
+          const st = portfolioStats(bestW, subMean, subCov, rf);
+          bestCombos.push({
+            etfs: combo.map((i,k) => ({ ...validETFsFinal[i], w: bestW[k] })),
+            stats: st,
+            score: bestScore,
+            size
+          });
+        }
+      }
+    }
+
+    // Sort by score, keep top 3 (one per size if possible)
+    bestCombos.sort((a,b) => a.score - b.score);
+    const shown = [];
+    const usedSizes = new Set();
+    for (const c of bestCombos) {
+      if (!usedSizes.has(c.size)) { shown.push(c); usedSizes.add(c.size); }
+      if (shown.length >= 3) break;
+    }
+    shown.sort((a,b) => a.size - b.size);
+
+    // ── Step 4: Render results ──
+    renderETFResults(shown, etfState.targetStats);
+
+  } catch(e) {
+    resultDiv.innerHTML = `<div class="etf-loading" style="color:var(--rose)">Erreur : ${e.message}</div>`;
+  } finally {
+    document.getElementById('etfEquivBtn').disabled = false;
+  }
+}
+
+function getCombinations(arr, size) {
+  if (size === 1) return arr.map(v => [v]);
+  const result = [];
+  for (let i = 0; i <= arr.length - size; i++) {
+    const rest = getCombinations(arr.slice(i+1), size-1);
+    for (const r of rest) result.push([arr[i], ...r]);
+  }
+  return result;
+}
+
+function renderETFResults(combos, target) {
+  const resultDiv = document.getElementById('etfEquivResult');
+
+  let html = `
+    <div style="margin-bottom:12px">
+      <div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Portefeuille cible</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <span class="etf-metric">Rendement : <strong>${(target.ret*100).toFixed(2)} %</strong></span>
+        <span class="etf-metric">Volatilité : <strong>${(target.vol*100).toFixed(2)} %</strong></span>
+        <span class="etf-metric">Sharpe : <strong>${target.sharpe.toFixed(2)}</strong></span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">`;
+
+  for (const combo of combos) {
+    // Score absolu : pénalise chaque écart relatif indépendamment
+    const _dVol  = Math.abs(combo.stats.vol - target.vol) / (target.vol + 1e-6);
+    const _dRet  = Math.abs(combo.stats.ret - target.ret) / (Math.abs(target.ret) + 0.01);
+    const rmse   = Math.sqrt(0.6 * _dVol*_dVol + 0.4 * _dRet*_dRet);
+    const matchPct = Math.max(0, Math.min(100, 100 * Math.exp(-2.5 * rmse)));
+    const matchColor = matchPct > 70 ? 'var(--teal)' : matchPct > 40 ? 'var(--amber)' : 'var(--rose)';
+    const dRet = ((combo.stats.ret - target.ret)*100).toFixed(2);
+    const dVol = ((combo.stats.vol - target.vol)*100).toFixed(2);
+    const dRetSign = dRet > 0 ? '+' : '';
+    const dVolSign = dVol > 0 ? '+' : '';
+
+    html += `<div class="etf-card">
+      <div class="etf-card-header">${combo.size} ETF${combo.size>1?'s':''}</div>
+      <div style="margin-bottom:10px">
+        ${combo.etfs.map(e => `
+          <div style="display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border)">
+            <div>
+              <strong style="font-size:0.8rem">${e.ticker}</strong>
+              <div style="font-size:0.62rem;color:var(--muted2)">${e.name}</div>
+              <div style="font-size:0.6rem;color:var(--muted);font-style:italic">${e.cat}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="color:var(--amber);font-weight:700;font-size:0.85rem">${(e.w*100).toFixed(1)} %</div>
+              <div class="alloc-bar-bg" style="width:50px;margin-top:3px">
+                <div class="alloc-bar-fill" style="width:${Math.min(100,e.w*100)}%"></div>
+              </div>
+            </div>
+          </div>`).join('')}
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:8px">
+        <div class="etf-metric">Rend.<br><strong style="color:var(--teal)">${(combo.stats.ret*100).toFixed(2)} %</strong><br><span style="font-size:0.6rem;color:var(--muted2)">${dRetSign}${dRet}%</span></div>
+        <div class="etf-metric">Vol.<br><strong style="color:var(--amber)">${(combo.stats.vol*100).toFixed(2)} %</strong><br><span style="font-size:0.6rem;color:var(--muted2)">${dVolSign}${dVol}%</span></div>
+        <div class="etf-metric">Sharpe<br><strong style="color:var(--blue)">${combo.stats.sharpe.toFixed(2)}</strong></div>
+      </div>
+      <div class="etf-metric" style="margin-bottom:4px">Score d'approximation : <strong style="color:${matchColor}">${matchPct.toFixed(0)} %</strong></div>
+      <div class="etf-match-bar"><div class="etf-match-fill" style="width:${matchPct.toFixed(0)}%;background:${matchColor}"></div></div>
+    </div>`;
+  }
+
+  html += '</div>';
+  resultDiv.innerHTML = html;
+}
+
+function renderPerf() {
+  const r=appState.results;
+  document.getElementById('perfCard').style.display='block';
+  document.getElementById('corrCard').style.display='block';
+
+  // Compute market proxy returns = equal-weight portfolio of all assets
+  const nA = r.n;
+  const mktRets = r.retsAligned[0].map((_,t) =>
+    r.retsAligned.reduce((s,arr)=>s+arr[t],0) / nA
+  );
+  const mktVar = r.retsAligned[0].map((_,t)=>mktRets[t]).reduce((s,v,t,a)=>{
+    const m=a.reduce((x,y)=>x+y,0)/a.length; return s+(v-m)*(v-m);
+  },0) / (mktRets.length-1);
+
+  const rows=r.allNames.map((name,i)=>{
+    // Beta = cov(asset, market) / var(market)
+    const assetRets = r.retsAligned[i];
+    const mA = assetRets.reduce((s,v)=>s+v,0)/assetRets.length;
+    const mM = mktRets.reduce((s,v)=>s+v,0)/mktRets.length;
+    const covAM = assetRets.reduce((s,v,t)=>s+(v-mA)*(mktRets[t]-mM),0)/(assetRets.length-1);
+    const beta = mktVar > 0 ? covAM / mktVar : 1;
+    return {name, ticker:r.available[i], ret:r.annMeanRets[i], vol:r.annStds[i],
+      sharpe:(r.annMeanRets[i]-appState.rf)/r.annStds[i], beta};
+  }).sort((a,b)=>b.sharpe-a.sharpe);
+
+  let html=`<thead><tr>
+    <th>Actif</th>
+    <th style="text-align:right">Rendement annualisé</th>
+    <th style="text-align:right">Volatilité annualisée</th>
+    <th style="text-align:right">Ratio de Sharpe</th>
+    <th style="text-align:right">Bêta</th>
+  </tr></thead><tbody>`;
+  for(const row of rows) {
+    const betaColor = row.beta>1.2?'var(--rose)':row.beta<0.8?'var(--teal)':'var(--ink2)';
+    html+=`<tr>
+      <td><strong>${row.name}</strong> <span style="color:var(--muted2);font-size:0.7rem">${row.ticker}</span></td>
+      <td class="${row.ret>=0?'positive':'negative'}">${(row.ret*100).toFixed(2)} %</td>
+      <td style="color:var(--amber)">${(row.vol*100).toFixed(2)} %</td>
+      <td class="${row.sharpe>=1?'positive':row.sharpe<0?'negative':''}">${row.sharpe.toFixed(2)}</td>
+      <td style="color:${betaColor};font-weight:500">${row.beta.toFixed(2)}</td></tr>`;
+  }
+  document.getElementById('perfTable').innerHTML=html+'</tbody>';
+  renderCorrMatrix();
+}
+
+function renderCorrMatrix() {
+  const r=appState.results; const n=r.n;
+  // covMatrix is weekly cov; std of weekly returns = annStd / sqrt(52)
+  const corr=Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>{
+    const si = r.annStds[i] / Math.sqrt(52);
+    const sj = r.annStds[j] / Math.sqrt(52);
+    return Math.max(-1, Math.min(1, r.covMatrix[i][j] / (si * sj + 1e-12)));
+  }));
+
+  // Color: blue gradient for positive, red for negative, white at 0
+  function corrColor(v) {
+    if (v >= 0) {
+      // white (255,255,255) -> blue (30,58,95)
+      const t = v;
+      const R = Math.round(255 + t*(30-255));
+      const G = Math.round(255 + t*(58-255));
+      const B = Math.round(255 + t*(95-255));
+      return `rgb(${R},${G},${B})`;
+    } else {
+      // white -> rose (122,31,46)
+      const t = -v;
+      const R = Math.round(255 + t*(122-255));
+      const G = Math.round(255 + t*(31-255));
+      const B = Math.round(255 + t*(46-255));
+      return `rgb(${R},${G},${B})`;
+    }
+  }
+  function textColor(v) {
+    return Math.abs(v) > 0.45 ? 'white' : 'var(--ink2)';
+  }
+
+  const labels=r.allNames.map(n=>n.length>9?n.slice(0,9):n);
+  let html='<table class="corr-table"><thead><tr><td style="min-width:72px"></td>';
+  // Horizontal labels — normal orientation
+  labels.forEach(l=>html+=`<th class="corr-label" style="text-align:center;white-space:nowrap;padding:4px 2px;font-size:0.6rem">${l}</th>`);
+  html+='</tr></thead><tbody>';
+  for(let i=0;i<n;i++){
+    html+=`<tr><td class="corr-label" style="white-space:nowrap;padding-right:8px">${labels[i]}</td>`;
+    for(let j=0;j<n;j++){
+      const v=corr[i][j];
+      const diag = i===j;
+      const bg = diag ? 'var(--surface3)' : corrColor(v);
+      const txt = diag ? 'var(--muted)' : textColor(v);
+      html+=`<td style="padding:2px"><div class="corr-cell" style="background:${bg};color:${txt};font-weight:${diag?'400':'500'}">${v.toFixed(2)}</div></td>`;
+    }
+    html+='</tr>';
+  }
+  document.getElementById('corrMatrix').innerHTML=html+'</tbody></table>';
+}
+
+// ── CML editable inputs ─────────────────────────────────────────────────────
+function startCMLEdit(field) { /* no-op: replaced by stepper buttons */ }
+
+let _applyingCML = false;
+let _cmlStepTimer = null;
+let _cmlCurrentVal = { ret: null, vol: null };
+
+function startCMLStep(field, delta) {
+  const r = appState.results;
+  if (!r) return;
+  // Read current value from display span
+  const span = document.getElementById(field === 'ret' ? 'mixRetInp' : 'mixVolInp');
+  let cur = parseFloat(span.textContent);
+  if (isNaN(cur)) cur = field === 'ret'
+    ? r.tangentStats.ret * 100
+    : r.tangentStats.vol * 100;
+  _cmlCurrentVal[field] = cur;
+
+  // Immediate first step
+  _cmlCurrentVal[field] += delta;
+  applyCMLEditDirect(field, _cmlCurrentVal[field]);
+
+  // Then repeat with acceleration
+  let delay = 300, count = 0;
+  function repeat() {
+    _cmlCurrentVal[field] += delta;
+    applyCMLEditDirect(field, _cmlCurrentVal[field]);
+    count++;
+    // Accelerate after 5 steps: 300ms → 80ms → 30ms
+    delay = count < 5 ? 180 : count < 15 ? 80 : 30;
+    _cmlStepTimer = setTimeout(repeat, delay);
+  }
+  _cmlStepTimer = setTimeout(repeat, delay);
+}
+
+function stopCMLStep() {
+  clearTimeout(_cmlStepTimer);
+  _cmlStepTimer = null;
+}
+
+function applyCMLEdit(field) { /* kept for legacy blur/keydown */ }
+
+function applyCMLEditDirect(field, val) {
+  if (_applyingCML) return;
+  const r = appState.results;
+  if (!r) return;
+
+  if (isNaN(val)) return;
+
+  // Clamp to CML range
+  const maxVol = r.tangentStats.vol * 2.2;
+  let exp;
+
+  if (field === 'vol') {
+    const targetVol = Math.max(0, Math.min(val/100, maxVol));
+    exp = targetVol / r.tangentStats.vol;
+  } else { // ret
+    // Solve: mixRet = rf*(1-exp) + tangentRet*exp → exp = (targetRet - rf)/(tangentRet - rf)
+    const targetRet = val / 100;
+    const denom = r.tangentStats.ret - appState.rf;
+    if (Math.abs(denom) < 1e-9) return;
+    exp = (targetRet - appState.rf) / denom;
+    exp = Math.max(0, Math.min(exp, 2.2));
+  }
+
+  appState.cmlExposure = exp;
+  const mixRet = (1-exp)*appState.rf + exp*r.tangentStats.ret;
+  const mixVol = Math.abs(exp)*r.tangentStats.vol;
+
+  _applyingCML = true;
+  updateCMLControls(exp, mixRet, mixVol);
+  _applyingCML = false;
+
+
+  // Update bar + labels
+  updateCMLBarLabels(exp);
+
+  // Move the draggable point on chart
+  const borderColor = exp>1?'#7a1f2e':'#1a5c52';
+  Plotly.restyle('cmlChart',{x:[[mixVol*100]],y:[[mixRet*100]],'marker.line.color':[borderColor]},[5]);
+  renderCMLAlloc();
+
+  // Reset card styles
+
 }
 
 function updateCMLBarLabels(exp) {
@@ -694,343 +2263,99 @@ function updateCMLBarLabels(exp) {
   }
 }
 
-let isDragging=false;
-function setupDraggablePoint() {
-  const chartDiv=document.getElementById('cmlChart');
-  if(chartDiv._draggableSetup) return;
-  chartDiv._draggableSetup=true;
-  chartDiv.addEventListener('mousedown',e=>{const c=getPlotCoords(e.clientX,e.clientY);if(!c)return;isDragging=true;snapToCML(c.x);e.preventDefault();});
-  document.addEventListener('mousemove',e=>{if(!isDragging)return;const c=getPlotCoords(e.clientX,e.clientY);if(c)snapToCML(c.x);e.preventDefault();});
-  document.addEventListener('mouseup',()=>{isDragging=false;});
-  chartDiv.addEventListener('touchstart',e=>{const t=e.touches[0];const c=getPlotCoords(t.clientX,t.clientY);if(!c)return;isDragging=true;snapToCML(c.x);e.preventDefault();},{passive:false});
-  document.addEventListener('touchmove',e=>{if(!isDragging)return;const t=e.touches[0];const c=getPlotCoords(t.clientX,t.clientY);if(c)snapToCML(c.x);e.preventDefault();},{passive:false});
-  document.addEventListener('touchend',()=>{isDragging=false;});
-  chartDiv.style.cursor='crosshair';
-}
-
-function getPlotCoords(clientX,clientY){
-  const chartDiv=document.getElementById('cmlChart');
-  const fl=chartDiv._fullLayout;if(!fl)return null;
-  const rect=chartDiv.getBoundingClientRect();
-  const l=fl.margin.l+rect.left,t=fl.margin.t+rect.top;
-  const w=fl.xaxis._length,h=fl.yaxis._length;
-  const px=clientX-l,py=clientY-t;
-  if(px<0||px>w||py<0||py>h)return null;
-  return{x:fl.xaxis.range[0]+(px/w)*(fl.xaxis.range[1]-fl.xaxis.range[0]),y:fl.yaxis.range[1]+(py/h)*(fl.yaxis.range[0]-fl.yaxis.range[1])};
-}
-
-function snapToCML(xVol_pct){
-  const r=appState.results;if(!r)return;
-  const maxVol=r.tangent_stats.vol*2.2;
-  const clampedVol=Math.max(0,Math.min(xVol_pct/100,maxVol));
-  const exp=clampedVol/r.tangent_stats.vol;
-  appState.cmlExposure=exp;
-  const mixRet=(1-exp)*appState.rf+exp*r.tangent_stats.ret;
-  const mixVol=Math.abs(exp)*r.tangent_stats.vol;
-  updateCMLControls(exp,mixRet,mixVol);
-  Plotly.restyle('cmlChart',{x:[[mixVol*100]],y:[[mixRet*100]],'marker.line.color':[exp>1?'#7a1f2e':'#1a5c52']},[5]);
-  renderCMLAlloc();
-}
-
-let _cmlStepTimer=null, _cmlCurrentVal={ret:null,vol:null};
-function startCMLStep(field,delta){
-  const r=appState.results;if(!r)return;
-  const span=document.getElementById(field==='ret'?'mixRetInp':'mixVolInp');
-  let cur=parseFloat(span.textContent);
-  if(isNaN(cur)) cur=field==='ret'?r.tangent_stats.ret*100:r.tangent_stats.vol*100;
-  _cmlCurrentVal[field]=cur;
-  _cmlCurrentVal[field]+=delta;
-  applyCMLEditDirect(field,_cmlCurrentVal[field]);
-  let delay=300,count=0;
-  function repeat(){_cmlCurrentVal[field]+=delta;applyCMLEditDirect(field,_cmlCurrentVal[field]);count++;delay=count<5?180:count<15?80:30;_cmlStepTimer=setTimeout(repeat,delay);}
-  _cmlStepTimer=setTimeout(repeat,delay);
-}
-function stopCMLStep(){clearTimeout(_cmlStepTimer);_cmlStepTimer=null;}
-
-let _applyingCML=false;
-function applyCMLEditDirect(field,val){
-  if(_applyingCML)return;
-  const r=appState.results;if(!r||isNaN(val))return;
-  const maxVol=r.tangent_stats.vol*2.2;
-  let exp;
-  if(field==='vol'){exp=Math.max(0,Math.min(val/100,maxVol))/r.tangent_stats.vol;}
-  else{const denom=r.tangent_stats.ret-appState.rf;if(Math.abs(denom)<1e-9)return;exp=Math.max(0,Math.min((val/100-appState.rf)/denom,2.2));}
-  appState.cmlExposure=exp;
-  const mixRet=(1-exp)*appState.rf+exp*r.tangent_stats.ret;
-  const mixVol=Math.abs(exp)*r.tangent_stats.vol;
-  _applyingCML=true;updateCMLControls(exp,mixRet,mixVol);_applyingCML=false;
-  Plotly.restyle('cmlChart',{x:[[mixVol*100]],y:[[mixRet*100]],'marker.line.color':[exp>1?'#7a1f2e':'#1a5c52']},[5]);
-  renderCMLAlloc();
-}
-
-function renderCMLAlloc(){
-  const r=appState.results;const exp=appState.cmlExposure;
-  const alloc=r.tangent_w.map((w,i)=>({name:r.allNames[i],ticker:r.available[i],wT:w,wTot:w*exp}))
-    .sort((a,b)=>b.wTot-a.wTot).filter(a=>a.wT>0.005);
-  const rfPart=Math.max(0,(1-exp)*100);
-  const levPart=Math.max(0,(exp-1)*100);
-  const hasRf=rfPart>0.05,hasLev=levPart>0.05;
-  let html=`<table class="alloc-table"><thead><tr><th>Actif</th><th style="text-align:right">Poids tangent</th><th style="text-align:right">Exposition totale</th></tr></thead><tbody>`;
-  if(hasRf) html+=`<tr><td><strong>Trésorerie</strong><br><span style="color:var(--muted2);font-size:0.65rem">Cash / Rf</span></td><td style="text-align:right;color:var(--teal)">—</td><td style="text-align:right;color:var(--teal)">${rfPart.toFixed(1)} %</td></tr>`;
-  for(const a of alloc) html+=`<tr><td><strong>${a.name}</strong><br><span style="color:var(--muted2);font-size:0.65rem">${a.ticker}</span></td><td style="text-align:right;color:var(--amber)">${(a.wT*100).toFixed(1)} %</td><td style="text-align:right;color:var(--blue)">${(a.wTot*100).toFixed(1)} %</td></tr>`;
-  if(hasLev) html+=`<tr><td><strong>Emprunt</strong><br><span style="color:var(--muted2);font-size:0.65rem">Levier financier</span></td><td style="text-align:right;color:var(--rose)">—</td><td style="text-align:right;color:var(--rose)">−${levPart.toFixed(1)} %</td></tr>`;
-  html+=`<tr style="border-top:1px solid var(--border);font-weight:600"><td>Total</td><td style="text-align:right;color:var(--muted)">${(exp<=1?exp*100:100).toFixed(0)} %</td><td style="text-align:right;color:var(--ink)">${(exp*100).toFixed(0)} %</td></tr>`;
-  document.getElementById('cmlAllocTable').innerHTML=html+'</tbody></table>';
-  const pieLabels=alloc.map(a=>a.name),pieValues=alloc.map(a=>Math.abs(a.wTot)*100),pieColors=alloc.map((_,i)=>`hsl(${200+i*22},40%,${45+i%3*8}%)`);
-  if(hasRf){pieLabels.unshift('Trésorerie');pieValues.unshift(rfPart);pieColors.unshift('#1a5c52');}
-  if(hasLev){pieLabels.push('Emprunt');pieValues.push(levPart);pieColors.push('#7a1f2e');}
-  Plotly.react('cmlPieChart',[{type:'pie',labels:pieLabels,values:pieValues,hole:0.42,marker:{colors:pieColors,line:{color:'white',width:1}},textinfo:'percent',hovertemplate:'<b>%{label}</b><br>%{value:.1f} %<extra></extra>',textfont:{color:'white',size:10}}],
-    {paper_bgcolor:'transparent',plot_bgcolor:'transparent',showlegend:false,margin:{l:10,r:10,t:10,b:10},font:{color:'#3d3830',family:'DM Sans, sans-serif'}},{responsive:true,displayModeBar:false});
-}
-
-// ── Risk levels ───────────────────────────────────────────────────────────────
-const RISK_LEVELS=[
-  {label:'Défensif',frac:0.00,qual:'Capital préservé en priorité. Convient à un horizon court ou une faible tolérance aux pertes.',math:"Portefeuille à variance minimale : w* = arg min w'Σw sous Σwᵢ=1, wᵢ≥0."},
-  {label:'Modéré',frac:0.25,qual:'Légère prise de risque pour améliorer le rendement. Bon équilibre pour un horizon moyen terme.',math:'Vol cible = σ_min + 25% × (σ_tangent − σ_min).'},
-  {label:'Équilibré',frac:0.50,qual:'Compromis rendement/risque centré. Adapté à un investisseur long terme.',math:'Vol cible = σ_min + 50% × (σ_tangent − σ_min).'},
-  {label:'Dynamique',frac:0.75,qual:'Priorité au rendement avec un risque élevé assumé. Horizon long terme.',math:'Vol cible = σ_min + 75% × (σ_tangent − σ_min).'},
-  {label:'Agressif',frac:1.00,qual:'Maximisation du rendement attendu. Concentration maximale sur le meilleur actif.',math:"Portefeuille tangent exact : w* = arg max (μ-rf)/σ."},
-];
-
-function renderRiskLevels(){
-  document.getElementById('riskCard').style.display='block';
-  const tabs=document.getElementById('riskTabs'); tabs.innerHTML='';
-  RISK_LEVELS.forEach((lvl,i)=>{
-    const wrap=document.createElement('div'); wrap.style.cssText='display:inline-flex;align-items:center;gap:0';
-    const btn=document.createElement('button'); btn.className='risk-tab'+(i===0?' active':''); btn.textContent=lvl.label;
-    btn.onclick=()=>{document.querySelectorAll('.risk-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderRiskContent(i);};
-    const tipWrap=document.createElement('span'); tipWrap.className='risk-tooltip-wrap';
-    tipWrap.innerHTML=`<span class="risk-help-btn" tabindex="0">?</span><div class="risk-tooltip-box"><strong>${lvl.label}</strong>${lvl.qual}<div class="tooltip-math">${lvl.math}</div></div>`;
-    wrap.appendChild(btn); wrap.appendChild(tipWrap); tabs.appendChild(wrap);
-  });
-  const customBtn=document.createElement('button'); customBtn.className='risk-tab custom'; customBtn.textContent='Personnalisé';
-  customBtn.onclick=()=>{document.querySelectorAll('.risk-tab').forEach(b=>b.classList.remove('active'));customBtn.classList.add('active');renderCustomRisk();};
-  tabs.appendChild(customBtn);
-  renderRiskContent(0);
-}
-
-function renderRiskAlloc(w,stats,containerSel,pieDivId){
-  const r=appState.results;
-  const alloc=r.allNames.map((name,i)=>({name,ticker:r.available[i],w:w[i]})).sort((a,b)=>b.w-a.w).filter(a=>a.w>0.005);
-  document.getElementById(containerSel).innerHTML=`
-    <div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">
-        <div class="kpi-card teal" style="padding:12px"><div class="kpi-label">Rendement</div><div class="kpi-value teal" style="font-size:1.2rem">${(stats.ret*100).toFixed(2)} %</div></div>
-        <div class="kpi-card amber" style="padding:12px"><div class="kpi-label">Volatilité</div><div class="kpi-value amber" style="font-size:1.2rem">${(stats.vol*100).toFixed(2)} %</div></div>
-        <div class="kpi-card blue" style="padding:12px"><div class="kpi-label">Ratio de Sharpe</div><div class="kpi-value blue" style="font-size:1.2rem">${stats.sharpe.toFixed(2)}</div></div>
-        <div class="kpi-card rose" style="padding:12px"><div class="kpi-label">Actifs</div><div class="kpi-value rose" style="font-size:1.2rem">${alloc.length}</div></div>
-      </div>
-      <table class="alloc-table"><thead><tr><th>Actif</th><th>Poids</th><th style="width:80px"></th></tr></thead>
-      <tbody>${alloc.map(a=>`<tr><td><strong>${a.name}</strong><br><span style="color:var(--muted2);font-size:0.65rem">${a.ticker}</span></td><td style="color:var(--amber)">${(a.w*100).toFixed(1)} %</td><td><div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:${Math.min(100,a.w*100)}%"></div></div></td></tr>`).join('')}</tbody></table>
-    </div>
-    <div id="${pieDivId}" style="height:300px"></div>`;
-  const colors=alloc.map((_,i)=>`hsl(${200+i*22},40%,${45+i%3*8}%)`);
-  Plotly.react(pieDivId,[{type:'pie',labels:alloc.map(a=>a.name),values:alloc.map(a=>a.w*100),hole:0.42,marker:{colors,line:{color:'white',width:1}},textinfo:'percent',hovertemplate:'<b>%{label}</b><br>%{value:.1f} %<extra></extra>',textfont:{color:'white',size:10}}],
-    {paper_bgcolor:'transparent',plot_bgcolor:'transparent',showlegend:false,margin:{l:10,r:10,t:10,b:10},font:{color:'#3d3830',family:'DM Sans, sans-serif'}},{responsive:true,displayModeBar:false});
-}
-
-function renderRiskContent(idx){
-  const r=appState.results;const lvl=RISK_LEVELS[idx];
-  let w,stats;
-  if(lvl.frac===1.00){w=r.tangent_w;stats=r.tangent_stats;}
-  else if(lvl.frac===0.00){w=r.min_var_w;stats=r.min_var_stats;}
-  else {
-    const targetVol=r.min_var_stats.vol+lvl.frac*(r.tangent_stats.vol-r.min_var_stats.vol);
-    const efIdx=r.ef_vols.reduce((best,v,i)=>Math.abs(v-targetVol)<Math.abs(r.ef_vols[best]-targetVol)?i:best,0);
-    w=r.ef_weights[efIdx];
-    stats=portfolioStatsLocal(w,r.mean_rets,r.cov_matrix,appState.rf);
-  }
-  renderRiskAlloc(w,stats,'riskContent','riskPieDiv');
-}
-
-function renderCustomRisk(){
-  const r=appState.results;const defStats=r.tangent_stats;
-  document.getElementById('riskContent').innerHTML=`
-    <div>
-      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:14px;font-style:italic">Cliquez sur une valeur pour la modifier. Les autres s'ajusteront automatiquement.</div>
-      <div class="custom-inputs">
-        <div class="custom-kpi-card teal" onclick="startCustomEdit('ret')">
-          <div class="kpi-label">Rendement souhaité</div>
-          <div class="kpi-value teal" style="font-size:1.2rem">
-            <input class="custom-input-field" id="inp-ret" type="number" step="0.01" placeholder="${(defStats.ret*100).toFixed(2)}" style="color:var(--teal)" oninput="solveCustom('ret')"/>
-            <span style="font-size:0.85rem;margin-left:2px">%</span>
-          </div>
-        </div>
-        <div class="custom-kpi-card amber" onclick="startCustomEdit('vol')">
-          <div class="kpi-label">Volatilité souhaitée</div>
-          <div class="kpi-value amber" style="font-size:1.2rem">
-            <input class="custom-input-field" id="inp-vol" type="number" step="0.01" placeholder="${(defStats.vol*100).toFixed(2)}" style="color:var(--amber)" oninput="solveCustom('vol')"/>
-            <span style="font-size:0.85rem;margin-left:2px">%</span>
-          </div>
-        </div>
-        <div class="custom-kpi-card blue" onclick="startCustomEdit('sharpe')">
-          <div class="kpi-label">Ratio de Sharpe</div>
-          <div class="kpi-value blue" style="font-size:1.2rem">
-            <input class="custom-input-field" id="inp-sharpe" type="number" step="0.01" placeholder="${defStats.sharpe.toFixed(2)}" style="color:var(--blue)" oninput="solveCustom('sharpe')"/>
-          </div>
-        </div>
-        <div class="kpi-card rose" style="padding:12px;cursor:default"><div class="kpi-label">Actifs optimaux</div><div class="kpi-value rose" style="font-size:1.2rem" id="cc-nassets">—</div></div>
-      </div>
-      <div id="customAllocLeft"></div>
-    </div>
-    <div id="customPie" style="height:300px;"></div>`;
-}
-
-function startCustomEdit(field){
-  ['ret','vol','sharpe'].forEach(f=>{const card=document.querySelector(`[onclick="startCustomEdit('${f}')"]`);if(card)card.classList.toggle('editing',f===field);});
-  const inp=document.getElementById('inp-'+field);if(inp){inp.focus();inp.select();}
-}
-
-let _solvingCustom=false;
-function solveCustom(field){
-  if(_solvingCustom)return;
-  const r=appState.results;
-  const rawVal=parseFloat(document.getElementById('inp-'+field).value);
-  if(isNaN(rawVal))return;
-  const efVols=r.ef_vols,efRets=r.ef_rets,efWeights=r.ef_weights;
-  const efSharpes=efVols.map((v,i)=>v>0?(efRets[i]-appState.rf)/v:0);
-  const maxVol=Math.max(...efVols),minVol=Math.min(...efVols),maxRet=Math.max(...efRets),minRet=Math.min(...efRets),maxSharpe=Math.max(...efSharpes),minSharpe=Math.min(...efSharpes);
-  let clampedVal=rawVal,clamped=false;
-  if(field==='vol'){if(rawVal>maxVol*100){clampedVal=maxVol*100;clamped=true;}if(rawVal<minVol*100){clampedVal=minVol*100;clamped=true;}}
-  else if(field==='ret'){if(rawVal>maxRet*100){clampedVal=maxRet*100;clamped=true;}if(rawVal<minRet*100){clampedVal=minRet*100;clamped=true;}}
-  else if(field==='sharpe'){if(rawVal>maxSharpe){clampedVal=maxSharpe;clamped=true;}if(rawVal<minSharpe){clampedVal=minSharpe;clamped=true;}}
-  if(clamped){const inp=document.getElementById('inp-'+field);inp.value=clampedVal.toFixed(2);inp.style.color='var(--rose)';setTimeout(()=>{inp.style.color=field==='vol'?'var(--amber)':field==='ret'?'var(--teal)':'var(--blue)';},900);}
-  const wMV=r.min_var_w,wT=r.tangent_w;
-  const t=field==='sharpe'?clampedVal:clampedVal/100;
-  const evalAlpha=a=>{const wk=wMV.map((v,i)=>(1-a)*v+a*wT[i]);return portfolioStatsLocal(wk,r.mean_rets,r.cov_matrix,appState.rf);};
-  const metric=s=>field==='vol'?s.vol:field==='ret'?s.ret:s.sharpe;
-  const f=a=>metric(evalAlpha(a))-t;
-  const f0=f(0),f1=f(1);
-  let alpha,w,stats;
-  const nearTangent=(field==='vol'&&Math.abs(clampedVal-r.tangent_stats.vol*100)<0.15)||(field==='ret'&&Math.abs(clampedVal-r.tangent_stats.ret*100)<0.15)||(field==='sharpe'&&Math.abs(clampedVal-r.tangent_stats.sharpe)<0.15);
-  const nearMinVar=(field==='vol'&&Math.abs(clampedVal-r.min_var_stats.vol*100)<0.15)||(field==='ret'&&Math.abs(clampedVal-r.min_var_stats.ret*100)<0.15)||(field==='sharpe'&&Math.abs(clampedVal-r.min_var_stats.sharpe)<0.15);
-  if(nearTangent){w=r.tangent_w;stats=r.tangent_stats;}
-  else if(nearMinVar){w=r.min_var_w;stats=r.min_var_stats;}
-  else{
-    if(f0*f1>0){alpha=Math.abs(f0)<Math.abs(f1)?0:1;}
-    else{let lo=0,hi=1;for(let i=0;i<64;i++){const mid=(lo+hi)/2;if(f(mid)*f0<=0)hi=mid;else lo=mid;}alpha=(lo+hi)/2;}
-    alpha=Math.max(0,Math.min(1,alpha));
-    const wInterp=wMV.map((v,i)=>(1-alpha)*v+alpha*wT[i]);
-    const wSum=wInterp.reduce((s,v)=>s+Math.max(0,v),0);
-    w=wInterp.map(v=>Math.max(0,v)/wSum);
-    stats=portfolioStatsLocal(w,r.mean_rets,r.cov_matrix,appState.rf);
-  }
-  _solvingCustom=true;
-  if(field!=='ret') document.getElementById('inp-ret').value=(stats.ret*100).toFixed(2);
-  if(field!=='vol') document.getElementById('inp-vol').value=(stats.vol*100).toFixed(2);
-  if(field!=='sharpe') document.getElementById('inp-sharpe').value=stats.sharpe.toFixed(2);
-  _solvingCustom=false;
-  const alloc=r.allNames.map((name,i)=>({name,ticker:r.available[i],w:w[i]})).filter(a=>a.w>0.005);
-  document.getElementById('cc-nassets').textContent=alloc.length;
-  const sortedAlloc=[...alloc].sort((a,b)=>b.w-a.w);
-  document.getElementById('customAllocLeft').innerHTML=`<table class="alloc-table"><thead><tr><th>Actif</th><th>Poids</th><th style="width:80px"></th></tr></thead><tbody>${sortedAlloc.map(a=>`<tr><td><strong>${a.name}</strong><br><span style="color:var(--muted2);font-size:0.65rem">${a.ticker}</span></td><td style="color:var(--amber)">${(a.w*100).toFixed(1)} %</td><td><div class="alloc-bar-bg"><div class="alloc-bar-fill" style="width:${Math.min(100,a.w*100)}%"></div></div></td></tr>`).join('')}</tbody></table>`;
-  const colors=sortedAlloc.map((_,i)=>`hsl(${200+i*22},40%,${45+i%3*8}%)`);
-  Plotly.react('customPie',[{type:'pie',labels:sortedAlloc.map(a=>a.name),values:sortedAlloc.map(a=>a.w*100),hole:0.42,marker:{colors,line:{color:'white',width:1}},textinfo:'percent',hovertemplate:'<b>%{label}</b><br>%{value:.1f} %<extra></extra>',textfont:{color:'white',size:10}}],
-    {paper_bgcolor:'transparent',plot_bgcolor:'transparent',showlegend:false,margin:{l:10,r:10,t:10,b:10},font:{color:'#3d3830',family:'DM Sans, sans-serif'}},{responsive:true,displayModeBar:false});
-}
-
-// ── ETF Equivalent ────────────────────────────────────────────────────────────
-async function computeETFEquivalent(){
-  const r=appState.results;if(!r)return;
-  const activeTab=document.querySelector('.risk-tab.active');
-  const isCustom=activeTab&&activeTab.textContent.trim()==='Personnalisé';
-  let targetRet,targetVol,targetSharpe;
-  if(isCustom){
-    targetRet=parseFloat(document.getElementById('inp-ret').value)/100;
-    targetVol=parseFloat(document.getElementById('inp-vol').value)/100;
-    targetSharpe=parseFloat(document.getElementById('inp-sharpe').value);
-  } else {
-    const kpis=document.querySelectorAll('#riskContent .kpi-value');
-    targetRet=parseFloat(kpis[0]?.textContent)/100||r.tangent_stats.ret;
-    targetVol=parseFloat(kpis[1]?.textContent)/100||r.tangent_stats.vol;
-    targetSharpe=parseFloat(kpis[2]?.textContent)||r.tangent_stats.sharpe;
-  }
-  const resultDiv=document.getElementById('etfEquivResult');
-  resultDiv.style.display='block';
-  resultDiv.innerHTML='<div class="etf-loading">Calcul en cours sur le serveur…</div>';
-  document.getElementById('etfEquivBtn').disabled=true;
-  try{
-    const resp=await fetch(`${API_URL}/etf-equivalent`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({target_ret:targetRet,target_vol:targetVol,target_sharpe:targetSharpe,period:appState.period,rf:appState.rf})});
-    if(!resp.ok) throw new Error((await resp.json().catch(()=>({detail:resp.statusText}))).detail);
-    const data=await resp.json();
-    renderETFResults(data.combos,{ret:targetRet,vol:targetVol,sharpe:targetSharpe});
-  }catch(e){resultDiv.innerHTML=`<div class="etf-loading" style="color:var(--rose)">Erreur : ${e.message}</div>`;}
-  finally{document.getElementById('etfEquivBtn').disabled=false;}
-}
-
-function renderETFResults(combos,target){
-  const resultDiv=document.getElementById('etfEquivResult');
-  let html=`<div style="margin-bottom:12px"><div style="font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Portefeuille cible</div><div style="display:flex;gap:10px;flex-wrap:wrap"><span class="etf-metric">Rendement : <strong>${(target.ret*100).toFixed(2)} %</strong></span><span class="etf-metric">Volatilité : <strong>${(target.vol*100).toFixed(2)} %</strong></span><span class="etf-metric">Sharpe : <strong>${target.sharpe.toFixed(2)}</strong></span></div></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">`;
-  for(const combo of combos){
-    const dVol=Math.abs(combo.stats.vol-target.vol)/(target.vol+1e-6);
-    const dRet=Math.abs(combo.stats.ret-target.ret)/(Math.abs(target.ret)+0.01);
-    const rmse=Math.sqrt(0.6*dVol*dVol+0.4*dRet*dRet);
-    const matchPct=Math.max(0,Math.min(100,100*Math.exp(-2.5*rmse)));
-    const matchColor=matchPct>70?'var(--teal)':matchPct>40?'var(--amber)':'var(--rose)';
-    const dRet2=((combo.stats.ret-target.ret)*100).toFixed(2);
-    const dVol2=((combo.stats.vol-target.vol)*100).toFixed(2);
-    html+=`<div class="etf-card"><div class="etf-card-header">${combo.size} ETF${combo.size>1?'s':''}</div><div style="margin-bottom:10px">${combo.etfs.map(e=>`<div style="display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border)"><div><strong style="font-size:0.8rem">${e.ticker}</strong><div style="font-size:0.62rem;color:var(--muted2)">${e.name}</div><div style="font-size:0.6rem;color:var(--muted);font-style:italic">${e.cat}</div></div><div style="text-align:right"><div style="color:var(--amber);font-weight:700;font-size:0.85rem">${(e.w*100).toFixed(1)} %</div><div class="alloc-bar-bg" style="width:50px;margin-top:3px"><div class="alloc-bar-fill" style="width:${Math.min(100,e.w*100)}%"></div></div></div></div>`).join('')}</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:8px"><div class="etf-metric">Rend.<br><strong style="color:var(--teal)">${(combo.stats.ret*100).toFixed(2)} %</strong><br><span style="font-size:0.6rem;color:var(--muted2)">${dRet2>0?'+':''}${dRet2}%</span></div><div class="etf-metric">Vol.<br><strong style="color:var(--amber)">${(combo.stats.vol*100).toFixed(2)} %</strong><br><span style="font-size:0.6rem;color:var(--muted2)">${dVol2>0?'+':''}${dVol2}%</span></div><div class="etf-metric">Sharpe<br><strong style="color:var(--blue)">${combo.stats.sharpe.toFixed(2)}</strong></div></div><div class="etf-metric" style="margin-bottom:4px">Score d'approximation : <strong style="color:${matchColor}">${matchPct.toFixed(0)} %</strong></div><div class="etf-match-bar"><div class="etf-match-fill" style="width:${matchPct.toFixed(0)}%;background:${matchColor}"></div></div></div>`;
-  }
-  resultDiv.innerHTML=html+'</div>';
-}
-
-// ── Performance ───────────────────────────────────────────────────────────────
-function renderPerf(){
-  const r=appState.results;
-  document.getElementById('perfCard').style.display='block';
-  document.getElementById('corrCard').style.display='block';
-  const nA=r.n;
-  const mktRets=r.rets_aligned[0].map((_,t)=>r.rets_aligned.reduce((s,arr)=>s+arr[t],0)/nA);
-  const mktVar=mktRets.reduce((s,v,t,a)=>{const m=a.reduce((x,y)=>x+y,0)/a.length;return s+(v-m)*(v-m);},0)/(mktRets.length-1);
-  const rows=r.allNames.map((name,i)=>{
-    const assetRets=r.rets_aligned[i];
-    const mA=assetRets.reduce((s,v)=>s+v,0)/assetRets.length;
-    const mM=mktRets.reduce((s,v)=>s+v,0)/mktRets.length;
-    const covAM=assetRets.reduce((s,v,t)=>s+(v-mA)*(mktRets[t]-mM),0)/(assetRets.length-1);
-    const beta=mktVar>0?covAM/mktVar:1;
-    return{name,ticker:r.available[i],ret:r.ann_mean_rets[i],vol:r.ann_stds[i],sharpe:(r.ann_mean_rets[i]-appState.rf)/r.ann_stds[i],beta};
-  }).sort((a,b)=>b.sharpe-a.sharpe);
-  let html=`<thead><tr><th>Actif</th><th style="text-align:right">Rendement annualisé</th><th style="text-align:right">Volatilité annualisée</th><th style="text-align:right">Ratio de Sharpe</th><th style="text-align:right">Bêta</th></tr></thead><tbody>`;
-  for(const row of rows){const betaColor=row.beta>1.2?'var(--rose)':row.beta<0.8?'var(--teal)':'var(--ink2)';html+=`<tr><td><strong>${row.name}</strong> <span style="color:var(--muted2);font-size:0.7rem">${row.ticker}</span></td><td class="${row.ret>=0?'positive':'negative'}">${(row.ret*100).toFixed(2)} %</td><td style="color:var(--amber)">${(row.vol*100).toFixed(2)} %</td><td class="${row.sharpe>=1?'positive':row.sharpe<0?'negative':''}">${row.sharpe.toFixed(2)}</td><td style="color:${betaColor};font-weight:500">${row.beta.toFixed(2)}</td></tr>`;}
-  document.getElementById('perfTable').innerHTML=html+'</tbody>';
-  renderCorrMatrix();
-}
-
-function renderCorrMatrix(){
-  const r=appState.results;const n=r.n;
-  const corr=Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>{
-    const si=r.ann_stds[i]/Math.sqrt(52),sj=r.ann_stds[j]/Math.sqrt(52);
-    return Math.max(-1,Math.min(1,r.cov_matrix[i][j]/(si*sj+1e-12)));
-  }));
-  function corrColor(v){
-    if(v>=0){const t=v;return`rgb(${Math.round(255+t*(30-255))},${Math.round(255+t*(58-255))},${Math.round(255+t*(95-255))})`;}
-    const t=-v;return`rgb(${Math.round(255+t*(176-255))},${Math.round(255+t*(48-255))},${Math.round(255+t*(69-255))})`;
-  }
-  const names=r.allNames;
-  let html=`<table class="corr-table"><tr><td></td>${names.map(n=>`<td class="corr-label" style="writing-mode:vertical-rl;transform:rotate(180deg);max-height:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${n}</td>`).join('')}</tr>`;
-  for(let i=0;i<n;i++){
-    html+=`<tr><td class="corr-label" style="white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis">${names[i]}</td>`;
-    for(let j=0;j<n;j++){
-      const v=corr[i][j];const bg=corrColor(v);
-      const textColor=Math.abs(v)>0.5?'white':'#3d3830';
-      html+=`<td><div class="corr-cell" style="background:${bg};color:${textColor}" title="${names[i]} × ${names[j]} : ${v.toFixed(2)}">${v.toFixed(2)}</div></td>`;
-    }
-    html+='</tr>';
-  }
-  document.getElementById('corrMatrix').innerHTML=html+'</table>';
-}
-
-// ── Contact ───────────────────────────────────────────────────────────────────
-function openContact(){
-  const u=['armand','villata'].join('.');const d=['icloud','com'].join('.');const addr=u+String.fromCharCode(64)+d;
-  const target=document.getElementById('contactMailTarget');target.innerHTML='';
-  const a=document.createElement('a');a.className='popup-mail';a.textContent=addr;a.href='mailto:'+addr;target.appendChild(a);
+function openContact() {
+  const u = ['armand', 'villata'].join('.');
+  const d = ['icloud', 'com'].join('.');
+  const addr = u + String.fromCharCode(64) + d;
+  const target = document.getElementById('contactMailTarget');
+  // Always rebuild to avoid any cached obfuscation
+  target.innerHTML = '';
+  const a = document.createElement('a');
+  a.className = 'popup-mail';
+  a.textContent = addr;
+  a.href = 'mailto:' + addr;
+  target.appendChild(a);
   document.getElementById('contactPopup').classList.add('active');
 }
-function closeContact(){document.getElementById('contactPopup').classList.remove('active');}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeContact();});
+function closeContact() {
+  document.getElementById('contactPopup').classList.remove('active');
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeContact(); });
+
+
+
+function filterAssets(query) {
+  const q = query.trim().toLowerCase();
+  document.getElementById('searchClear').classList.toggle('visible', q.length > 0);
+
+  document.querySelectorAll('.asset-category').forEach(cat => {
+    const items = cat.querySelectorAll('.asset-item');
+    const toggle = cat.querySelector('.category-toggle');
+    const itemsDiv = cat.querySelector('.category-items');
+
+    if (!q) {
+      // Empty query: show all items and categories, restore closed state
+      items.forEach(item => item.style.display = '');
+      cat.style.display = '';
+      // Close back if it was closed before search (no .open class from user)
+      if (!cat._wasOpen) {
+        toggle.classList.remove('open');
+        itemsDiv.classList.remove('open');
+      }
+      delete cat._wasOpen;
+    } else {
+      // Save open state before first filter
+      if (cat._wasOpen === undefined) {
+        cat._wasOpen = toggle.classList.contains('open');
+      }
+      // Show only matching items
+      let anyVisible = false;
+      items.forEach(item => {
+        const match = item.textContent.toLowerCase().includes(q);
+        item.style.display = match ? '' : 'none';
+        if (match) anyVisible = true;
+      });
+      cat.style.display = anyVisible ? '' : 'none';
+      if (anyVisible) {
+        toggle.classList.add('open');
+        itemsDiv.classList.add('open');
+      } else {
+        toggle.classList.remove('open');
+        itemsDiv.classList.remove('open');
+      }
+    }
+  });
+}
+
+function resetSelection() {
+  appState.selected.clear();
+  document.querySelectorAll('.asset-item').forEach(el => {
+    el.classList.remove('selected');
+    const cb = el.querySelector('input[type="checkbox"]');
+    if (cb) cb.checked = false;
+  });
+  document.getElementById('selectedCount').textContent = 0;
+}
+
+function clearSearch() {
+  const inp = document.getElementById('assetSearch');
+  inp.value = '';
+  filterAssets('');
+  inp.focus();
+}
 
 buildSidebar();
+
+
 </script>
+<!-- Contact popup -->
+<div class="popup-overlay" id="contactPopup" onclick="if(event.target===this)closeContact()">
+  <div class="popup-box">
+    <button class="popup-close" onclick="closeContact()">✕</button>
+    <div class="popup-title">Contact</div>
+    <div class="popup-label">Pour toute question ou suggestion :</div>
+    <div id="contactMailTarget"></div>
+  </div>
+</div>
 </body>
 </html>
