@@ -43,7 +43,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-sans); 
 
 /* PAGE 0 — Accueil pleine page */
 .home-page {
-  width: 50vw; min-width: 50vw; height: 100vh;
+  width: 100vw; min-width: 100vw; height: 100vh;
   background: var(--surface);
   display: flex; flex-direction: column;
   overflow: hidden; position: relative;
@@ -51,7 +51,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-sans); 
 
 /* PAGE 1 — App analyse */
 .app {
-  width: 50vw; min-width: 50vw; height: 100vh;
+  width: 100vw; min-width: 100vw; height: 100vh;
   display: flex; overflow: hidden; position: relative;
 }
 
@@ -1153,9 +1153,9 @@ function renderHomeAssetList(filterText) {
 
       // Stats calculées (si dispo) ou placeholder
       const stats = (window.assetStatsCache && window.assetStatsCache[item.ticker]) || null;
-      const retStr = stats ? `<div class="har-stat-val ${stats.ret >= 0 ? 'positive' : 'negative'}">${stats.ret >= 0 ? '+' : ''}${stats.ret.toFixed(1)}%</div><div class="har-stat-lbl">1an</div>` : `<div class="har-stat-val" style="color:var(--muted2)">—</div><div class="har-stat-lbl">Rend.</div>`;
-      const volStr = stats ? `<div class="har-stat-val" style="color:var(--amber)">${stats.vol.toFixed(1)}%</div><div class="har-stat-lbl">Vol.</div>` : `<div class="har-stat-val" style="color:var(--muted2)">—</div><div class="har-stat-lbl">Vol.</div>`;
-      const shrStr = stats ? `<div class="har-stat-val" style="color:var(--blue)">${stats.sharpe.toFixed(2)}</div><div class="har-stat-lbl">Sharpe</div>` : `<div class="har-stat-val" style="color:var(--muted2)">—</div><div class="har-stat-lbl">Sharpe</div>`;
+      const retStr = stats ? `<div class="har-stat-val ${stats.ret >= 0 ? 'positive' : 'negative'}">${stats.ret >= 0 ? '+' : ''}${stats.ret.toFixed(1)}%</div>` : `<div class="har-stat-val" style="color:var(--muted2)">—</div>`;
+      const volStr = stats ? `<div class="har-stat-val" style="color:var(--amber)">${stats.vol.toFixed(1)}%</div>` : `<div class="har-stat-val" style="color:var(--muted2)">—</div>`;
+      const shrStr = stats ? `<div class="har-stat-val" style="color:var(--blue)">${stats.sharpe.toFixed(2)}</div>` : `<div class="har-stat-val" style="color:var(--muted2)">—</div>`;
 
       // Labels (sector tags)
       const labelsHtml = (item.labels||[]).map(l =>
@@ -1186,7 +1186,7 @@ function renderHomeAssetList(filterText) {
           });
           if (!isOpen) {
             chartDiv.classList.add('open');
-            renderHomeChart(item.ticker, item.name, chartDiv.querySelector('.home-asset-chart-inner'), chartDiv.querySelector('.home-asset-chart-header'));
+            renderHomeChart(item.ticker, item.name, chartDiv.querySelector('.home-asset-chart-inner'), chartDiv);
           }
         }
       };
@@ -1222,13 +1222,13 @@ async function renderHomeChart(ticker, name, container, headerEl) {
   const fmt = d => d.toISOString().split('T')[0];
 
   try {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1wk&range=${period}y`;
-    // Yahoo Finance via proxy CORS
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+    // Yahoo Finance via proxy CORS fiable
+    const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ticker)}?interval=1wk&range=${period}y&includePrePost=false`;
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(yahooUrl)}`;
     const resp = await fetch(proxyUrl);
-    const json = await resp.json();
-    const data = JSON.parse(json.contents);
-    const result = data.chart.result[0];
+    const data = await resp.json();
+    const result = (data.chart && data.chart.result && data.chart.result[0]);
+    if (!result) throw new Error('Pas de données');
     const timestamps = result.timestamp;
     const closes = result.indicators.quote[0].close;
 
@@ -1243,7 +1243,7 @@ async function renderHomeChart(ticker, name, container, headerEl) {
     const color = isPos ? getComputedStyle(document.documentElement).getPropertyValue('--teal-lt').trim() : getComputedStyle(document.documentElement).getPropertyValue('--rose-lt').trim();
 
     if (headerEl) {
-      const perfEl = headerEl.querySelector('.home-asset-chart-perf') || document.getElementById('homeChartPerf_' + ticker);
+      const perfEl = document.getElementById('homeChartPerf_' + ticker) || headerEl.querySelector('.home-asset-chart-perf');
       if (perfEl) {
         perfEl.textContent = (isPos ? '+' : '') + perfPct.toFixed(1) + '% sur ' + period + ' an' + (period > 1 ? 's' : '');
         perfEl.style.color = isPos ? 'var(--teal)' : 'var(--rose)';
