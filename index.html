@@ -704,16 +704,9 @@ input[type=range]::-webkit-slider-thumb { appearance: none; width: 13px; height:
   // Fetch users.json depuis GitHub API (supporte repos privés)
   async function fetchUsers() {
     const url = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${USERS_PATH}`;
-    const resp = await fetch(url, {
-      headers: {
-        'Authorization': 'Bearer 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',
-        'Accept': 'application/vnd.github.v3+json'
-      }
-    });
+    const resp = await fetch(url);
     if (!resp.ok) throw new Error('Impossible de charger la liste des utilisateurs (HTTP ' + resp.status + ')');
-    const data = await resp.json();
-    const decoded = decodeURIComponent(escape(atob(data.content)));
-    return JSON.parse(decoded);
+    return await resp.json();
   }
 
   window.doLogin = async function() {
