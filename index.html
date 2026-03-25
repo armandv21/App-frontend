@@ -441,6 +441,56 @@ input[type=range]::-webkit-slider-thumb { appearance: none; width: 13px; height:
   font-size: 0.75rem; display: none; line-height: 1;
 }
 .search-clear.visible { display: block; }
+
+/* ── AUTH OVERLAY ── */
+#authOverlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-sans);
+}
+#authOverlay.hidden { display: none; }
+.auth-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 44px 40px 36px; width: 340px;
+  box-shadow: 0 8px 32px rgba(30,26,20,0.10);
+  display: flex; flex-direction: column; align-items: center;
+}
+.auth-title {
+  font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700;
+  color: var(--ink); margin-bottom: 30px; text-align: center; line-height: 1.3;
+}
+.auth-field { width: 100%; margin-bottom: 14px; }
+.auth-field label {
+  display: block; font-size: 0.68rem; font-weight: 600;
+  letter-spacing: 0.10em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 6px;
+}
+.auth-field input {
+  width: 100%; padding: 10px 13px; background: var(--bg);
+  border: 1px solid var(--border2); border-radius: 6px;
+  font-family: var(--font-sans); font-size: 0.85rem;
+  color: var(--ink); outline: none; transition: border-color 0.15s;
+}
+.auth-field input:focus { border-color: var(--blue-lt); }
+.auth-btn {
+  width: 100%; padding: 11px; background: var(--blue); color: white;
+  border: none; border-radius: 6px; font-family: var(--font-sans);
+  font-size: 0.78rem; font-weight: 600; letter-spacing: 0.07em;
+  text-transform: uppercase; cursor: pointer; transition: background 0.15s; margin-top: 6px;
+}
+.auth-btn:hover { background: var(--blue-lt); }
+.auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.auth-error { font-size: 0.75rem; color: var(--rose-lt); text-align: center; margin-top: 10px; min-height: 18px; }
+.auth-spinner {
+  width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white; border-radius: 50%;
+  animation: authSpin 0.7s linear infinite;
+  display: inline-block; vertical-align: middle; margin-right: 6px;
+}
+@keyframes authSpin { to { transform: rotate(360deg); } }
+.auth-divider { width: 100%; border: none; border-top: 1px solid var(--border); margin: 22px 0 0; }
+.auth-note { font-size: 0.65rem; color: var(--muted2); text-align: center; margin-top: 12px; line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -593,6 +643,17 @@ input[type=range]::-webkit-slider-thumb { appearance: none; width: 13px; height:
       <button class="tab-btn" onclick="switchTab('cml',this)">CML interactive</button>
       <button class="tab-btn" onclick="switchTab('risk',this)">Niveaux de risque</button>
       <button class="contact-btn" onclick="openContact()">Contact</button>
+      <button onclick="doLogout()" style="
+        margin-left:8px; padding: 7px 14px;
+        background: none; border: 1px solid var(--border);
+        border-radius: 5px; font-family: var(--font-sans);
+        font-size: 0.70rem; font-weight: 500; color: var(--muted);
+        cursor: pointer; transition: all 0.18s; white-space: nowrap;
+        align-self: center; margin-bottom: 6px;
+      " onmouseover="this.style.borderColor='var(--rose-lt)';this.style.color='var(--rose-lt)'"
+         onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
+        Se déconnecter
+      </button>
     </div>
     <div class="content">
 
@@ -1080,5 +1141,70 @@ function clearHomeSearch() {
   }, 100);
 })();
 </script>
+<script>
+(function() {
+  const GITHUB_USER = 'armandv21';
+  const GITHUB_REPO = 'App-frontend';
+  const USERS_PATH  = 'users.json';
+  const SESSION_KEY = 'mrkwtz_auth';
+
+  if (sessionStorage.getItem(SESSION_KEY) === '1') {
+    document.getElementById('authOverlay').classList.add('hidden');
+  }
+
+  async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  async function fetchUsers() {
+    const url = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${USERS_PATH}`;
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    return await resp.json();
+  }
+
+  window.doLogin = async function() {
+    const btn    = document.getElementById('authBtn');
+    const errDiv = document.getElementById('authError');
+    const user   = document.getElementById('authUser').value.trim().toLowerCase();
+    const pass   = document.getElementById('authPass').value;
+    errDiv.textContent = '';
+    if (!user || !pass) { errDiv.textContent = 'Veuillez remplir tous les champs.'; return; }
+    btn.disabled = true;
+    btn.innerHTML = '<span class="auth-spinner"></span>Vérification…';
+    try {
+      const users   = await fetchUsers();
+      const hashPwd = await sha256(pass);
+      if (users[user] && users[user] === hashPwd) {
+        sessionStorage.setItem(SESSION_KEY, '1');
+        document.getElementById('authOverlay').classList.add('hidden');
+      } else {
+        errDiv.textContent = 'Identifiant ou mot de passe incorrect.';
+      }
+    } catch(e) {
+      errDiv.textContent = 'Erreur de connexion : ' + e.message;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Connexion';
+    }
+  };
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !document.getElementById('authOverlay').classList.contains('hidden')) {
+      doLogin();
+    }
+  });
+
+  window.doLogout = function() {
+    sessionStorage.removeItem(SESSION_KEY);
+    document.getElementById('authOverlay').classList.remove('hidden');
+    document.getElementById('authUser').value = '';
+    document.getElementById('authPass').value = '';
+    document.getElementById('authError').textContent = '';
+  };
+})();
+</script>
+
 </body>
 </html>
