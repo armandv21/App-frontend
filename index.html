@@ -33,10 +33,64 @@
 body { background: var(--bg); color: var(--ink); font-family: var(--font-sans); font-size: 14px; min-height: 100vh; overflow-x: hidden; }
 
 /* ── APP LAYOUT ── */
-.app { display: flex; height: 100vh; overflow: hidden; }
+.app { display: flex; height: 100vh; overflow: hidden; position: relative; }
 
 /* SIDEBAR */
-.sidebar { width: 280px; min-width: 280px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+.sidebar {
+  width: 280px; min-width: 280px; background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow: hidden;
+  transition: width 0.45s cubic-bezier(0.77,0,0.18,1),
+              min-width 0.45s cubic-bezier(0.77,0,0.18,1);
+  position: relative; z-index: 10; flex-shrink: 0;
+}
+.sidebar.expanded {
+  width: 100vw; min-width: 100vw;
+}
+/* Flèche sur le bord droit de la sidebar */
+.sidebar-expand-btn {
+  position: absolute;
+  left: 280px; /* bord droit de la sidebar */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px; height: 48px;
+  background: var(--surface);
+  border: 1px solid var(--border); border-left: none;
+  border-radius: 0 7px 7px 0;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 20;
+  color: var(--muted); font-size: 0.6rem;
+  /* Même transition que la sidebar pour mouvement synchrone */
+  transition: left 0.45s cubic-bezier(0.77,0,0.18,1),
+              background 0.18s, color 0.18s;
+  box-shadow: 3px 0 8px rgba(0,0,0,0.08);
+}
+.sidebar-expand-btn:hover { background: var(--surface2); color: var(--blue); }
+/* Quand la sidebar est expanded, la flèche se cache */
+.sidebar.expanded ~ .sidebar-expand-btn,
+.sidebar.expanded + .sidebar-expand-btn { opacity: 0; pointer-events: none; }
+/* Bouton fermer — visible seulement en mode expanded */
+.sidebar-collapse-btn {
+  display: none;
+  position: absolute; right: 16px; top: 18px;
+  background: none; border: 1px solid var(--border);
+  border-radius: 5px; width: 28px; height: 28px;
+  cursor: pointer; color: var(--muted); font-size: 0.85rem;
+  align-items: center; justify-content: center;
+  transition: all 0.15s; z-index: 21; font-family: var(--font-sans);
+}
+.sidebar-collapse-btn:hover { border-color: var(--rose-lt); color: var(--rose-lt); }
+.sidebar.expanded .sidebar-expand-btn { display: none; }
+.sidebar.expanded .sidebar-collapse-btn { display: flex; }
+/* Vue étendue */
+.sidebar-expanded-view {
+  display: none; flex-direction: column; flex: 1; overflow: hidden;
+}
+.sidebar.expanded .sidebar-expanded-view { display: flex; }
+.sidebar.expanded #assetBodySection { display: none; }
+.sidebar.expanded .sidebar-sticky { display: none; }
+/* En mode expanded, le footer params reste visible */
+.sidebar.expanded .sidebar-params { display: block; }
 
 /* ── PANNEAU ACTIFS PLEINE PAGE ── */
 .asset-panel {
@@ -610,10 +664,9 @@ input[type=range]::-webkit-slider-thumb { appearance: none; width: 13px; height:
 <div class="app">
   <aside class="sidebar">
     <div class="sidebar-header">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;">
-        <div class="sidebar-title" style="font-size:1.55rem;line-height:1.2;background:linear-gradient(135deg,#1e3a5f 0%,#3466a0 50%,#1a5c52 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Optimiseur de Portefeuille</div>
-        <button onclick="openAssetPanel()" title="Vue pleine page des actifs" style="background:none;border:1px solid var(--border);border-radius:5px;width:26px;height:26px;cursor:pointer;color:var(--muted);font-size:0.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:8px;margin-top:2px;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">⤢</button>
-      </div>
+      <div class="sidebar-title" style="font-size:1.55rem;line-height:1.2;background:linear-gradient(135deg,#1e3a5f 0%,#3466a0 50%,#1a5c52 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Optimiseur de Portefeuille</div>
+      <!-- Bouton fermer (visible en mode expanded) -->
+      <button class="sidebar-collapse-btn" onclick="collapseSidebar()" title="Réduire">✕</button>
     </div>
     <div class="sidebar-sticky">
       <div class="sidebar-section-toggle" onclick="toggleAssetSection()">
@@ -629,8 +682,31 @@ input[type=range]::-webkit-slider-thumb { appearance: none; width: 13px; height:
         <div id="filterPanelSticky"></div>
       </div>
     </div>
+    <!-- Vue normale -->
     <div class="sidebar-body" id="assetBodySection">
       <div id="assetList"></div>
+    </div>
+
+    <!-- Vue étendue (visible en mode expanded) -->
+    <div class="sidebar-expanded-view" id="sidebarExpandedView">
+      <!-- Recherche -->
+      <div style="padding:8px 32px;border-bottom:1px solid var(--border);flex-shrink:0;">
+        <div class="search-wrap" style="margin-bottom:0">
+          <input class="search-input" id="sidebarExpandSearch" type="text" placeholder="Rechercher un actif…" oninput="filterHomeAssets(this.value)"/>
+          <button class="search-clear" id="sidebarExpandClear" onclick="this.classList.remove('visible');document.getElementById('sidebarExpandSearch').value='';renderHomeAssetList('');">✕</button>
+        </div>
+      </div>
+      <!-- En-têtes colonnes -->
+      <div style="display:flex;align-items:center;padding:5px 32px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;gap:10px;">
+        <div style="width:14px;flex-shrink:0;"></div>
+        <div style="flex:1;font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">Actif</div>
+        <div style="min-width:50px;text-align:right;flex-shrink:0;font-size:0.58rem;font-weight:700;text-transform:uppercase;color:var(--muted)">Labels</div>
+        <div style="min-width:54px;text-align:right;flex-shrink:0;font-size:0.58rem;font-weight:700;text-transform:uppercase;color:var(--blue)">Sharpe</div>
+        <div style="min-width:54px;text-align:right;flex-shrink:0;font-size:0.58rem;font-weight:700;text-transform:uppercase;color:var(--amber)">Vol.</div>
+        <div style="min-width:54px;text-align:right;flex-shrink:0;font-size:0.58rem;font-weight:700;text-transform:uppercase;color:var(--teal)">Rend.</div>
+      </div>
+      <!-- Liste actifs avec stats + graphes -->
+      <div class="home-asset-list" id="homeAssetList" style="flex:1;overflow-y:auto;"></div>
     </div>
     <div class="sidebar-params" id="paramsSection">
       <div style="padding:0 20px">
@@ -675,6 +751,9 @@ input[type=range]::-webkit-slider-thumb { appearance: none; width: 13px; height:
       <button class="btn-run" id="btnRun" onclick="runOptimization()">Calculer</button>
     </div>
   </aside>
+
+  <!-- Flèche expand — positionnée sur le bord droit de la sidebar, hors du aside -->
+  <button class="sidebar-expand-btn" id="sidebarExpandBtn" onclick="expandSidebar()" title="Voir tous les actifs">▶</button>
 
   <main class="main">
     <div class="topbar">
@@ -1231,6 +1310,59 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && !document.getElementById('authOverlay').classList.contains('hidden')) {
     doLogin();
   }
+});
+</script>
+
+<script>
+function expandSidebar() {
+  const sb = document.querySelector('.sidebar');
+  const btn = document.getElementById('sidebarExpandBtn');
+  sb.getBoundingClientRect(); // reflow pour transition symétrique
+  sb.classList.add('expanded');
+  // Synchroniser la position de la flèche avec la sidebar
+  if (btn) btn.style.left = '100vw';
+  // Charger les actifs avec graphes si pas encore fait
+  if (typeof renderHomeAssetList === 'function') renderHomeAssetList('');
+  if (typeof updateHomeCount === 'function') updateHomeCount();
+  // Pre-charger les graphes des actifs visibles après la transition
+  setTimeout(() => {
+    const s = document.getElementById('sidebarExpandSearch');
+    if (s) s.focus();
+    preloadVisibleCharts();
+  }, 460);
+}
+
+function collapseSidebar() {
+  const sb = document.querySelector('.sidebar');
+  const btn = document.getElementById('sidebarExpandBtn');
+  sb.getBoundingClientRect(); // reflow pour transition symétrique
+  sb.classList.remove('expanded');
+  if (btn) btn.style.left = '280px';
+  const s = document.getElementById('sidebarExpandSearch');
+  if (s) s.value = '';
+  document.getElementById('sidebarExpandClear')?.classList.remove('visible');
+  // Fermer tous les graphes ouverts
+  document.querySelectorAll('.home-asset-chart.open').forEach(c => c.classList.remove('open'));
+}
+
+// Pré-charger les graphes des actifs sélectionnés + les 5 premiers visibles
+function preloadVisibleCharts() {
+  if (!window.ASSETS_DATA) return;
+  const period = parseFloat(document.getElementById('homePeriodInput')?.value || document.getElementById('periodInput')?.value || 2);
+  let count = 0;
+  // D'abord les actifs sélectionnés
+  (window.selectedAssets || []).forEach(ticker => {
+    const chartDiv = document.getElementById('homeChart_' + ticker);
+    if (chartDiv && !chartDiv.classList.contains('open')) {
+      chartDiv.classList.add('open');
+      const cat = window.ASSETS_DATA.find(c => c.items.some(i => i.ticker === ticker));
+      if (cat) renderHomeChart(ticker, '', cat.color);
+    }
+  });
+}
+// Fermer avec Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') collapseSidebar();
 });
 </script>
 
