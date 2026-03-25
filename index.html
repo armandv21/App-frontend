@@ -650,7 +650,7 @@ input[type=range]::-webkit-slider-thumb { appearance: none; width: 13px; height:
       <button class="tab-btn" onclick="switchTab('cml',this)">CML interactive</button>
       <button class="tab-btn" onclick="switchTab('risk',this)">Niveaux de risque</button>
       <button class="contact-btn" onclick="openContact()">Contact</button>
-      <button onclick="doLogout()" class="logout-btn">↩ Déconnexion</button>
+      <button class="logout-btn" onclick="sessionStorage.removeItem('mrkwtz_auth');location.reload();">↩ Déconnexion</button>
     </div>
     <div class="content">
 
