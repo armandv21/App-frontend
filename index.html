@@ -442,6 +442,13 @@ input[type=range]::-webkit-slider-thumb { appearance: none; width: 13px; height:
 }
 .search-clear.visible { display: block; }
 
+.logout-btn {
+  margin-left: 8px; padding: 6px 14px; margin-bottom: 6px; align-self: center;
+  background: none; border: 1px solid var(--border); border-radius: 5px;
+  font-family: var(--font-sans); font-size: 0.70rem; font-weight: 500;
+  color: var(--muted); cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.logout-btn:hover { border-color: var(--rose-lt); color: var(--rose-lt); }
 /* ── AUTH OVERLAY ── */
 #authOverlay {
   position: fixed; inset: 0; z-index: 9999;
@@ -643,17 +650,7 @@ input[type=range]::-webkit-slider-thumb { appearance: none; width: 13px; height:
       <button class="tab-btn" onclick="switchTab('cml',this)">CML interactive</button>
       <button class="tab-btn" onclick="switchTab('risk',this)">Niveaux de risque</button>
       <button class="contact-btn" onclick="openContact()">Contact</button>
-      <button onclick="doLogout()" style="
-        margin-left:8px; padding: 7px 14px;
-        background: none; border: 1px solid var(--border);
-        border-radius: 5px; font-family: var(--font-sans);
-        font-size: 0.70rem; font-weight: 500; color: var(--muted);
-        cursor: pointer; transition: all 0.18s; white-space: nowrap;
-        align-self: center; margin-bottom: 6px;
-      " onmouseover="this.style.borderColor='var(--rose-lt)';this.style.color='var(--rose-lt)'"
-         onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">
-        Se déconnecter
-      </button>
+      <button onclick="doLogout()" class="logout-btn">↩ Déconnexion</button>
     </div>
     <div class="content">
 
@@ -1142,68 +1139,76 @@ function clearHomeSearch() {
 })();
 </script>
 <script>
+// ── Auth ──────────────────────────────────────────
+const _AUTH = {
+  GITHUB_USER: 'armandv21',
+  GITHUB_REPO: 'App-frontend',
+  USERS_PATH:  'users.json',
+  SESSION_KEY: 'mrkwtz_auth'
+};
+
+// Afficher l'overlay au chargement si pas connecté
 (function() {
-  const GITHUB_USER = 'armandv21';
-  const GITHUB_REPO = 'App-frontend';
-  const USERS_PATH  = 'users.json';
-  const SESSION_KEY = 'mrkwtz_auth';
-
-  if (sessionStorage.getItem(SESSION_KEY) === '1') {
-    document.getElementById('authOverlay').classList.add('hidden');
+  const overlay = document.getElementById('authOverlay');
+  if (sessionStorage.getItem(_AUTH.SESSION_KEY) !== '1') {
+    overlay.classList.remove('hidden');
+  } else {
+    overlay.classList.add('hidden');
   }
-
-  async function sha256(str) {
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-  }
-
-  async function fetchUsers() {
-    const url = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${USERS_PATH}`;
-    const resp = await fetch(url);
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    return await resp.json();
-  }
-
-  window.doLogin = async function() {
-    const btn    = document.getElementById('authBtn');
-    const errDiv = document.getElementById('authError');
-    const user   = document.getElementById('authUser').value.trim().toLowerCase();
-    const pass   = document.getElementById('authPass').value;
-    errDiv.textContent = '';
-    if (!user || !pass) { errDiv.textContent = 'Veuillez remplir tous les champs.'; return; }
-    btn.disabled = true;
-    btn.innerHTML = '<span class="auth-spinner"></span>Vérification…';
-    try {
-      const users   = await fetchUsers();
-      const hashPwd = await sha256(pass);
-      if (users[user] && users[user] === hashPwd) {
-        sessionStorage.setItem(SESSION_KEY, '1');
-        document.getElementById('authOverlay').classList.add('hidden');
-      } else {
-        errDiv.textContent = 'Identifiant ou mot de passe incorrect.';
-      }
-    } catch(e) {
-      errDiv.textContent = 'Erreur de connexion : ' + e.message;
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Connexion';
-    }
-  };
-
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !document.getElementById('authOverlay').classList.contains('hidden')) {
-      doLogin();
-    }
-  });
-
-  window.doLogout = function() {
-    sessionStorage.removeItem(SESSION_KEY);
-    document.getElementById('authOverlay').classList.remove('hidden');
-    document.getElementById('authUser').value = '';
-    document.getElementById('authPass').value = '';
-    document.getElementById('authError').textContent = '';
-  };
 })();
+
+async function _sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function _fetchUsers() {
+  const url = `https://raw.githubusercontent.com/${_AUTH.GITHUB_USER}/${_AUTH.GITHUB_REPO}/main/${_AUTH.USERS_PATH}`;
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error('HTTP ' + resp.status);
+  return await resp.json();
+}
+
+window.doLogin = async function() {
+  const btn    = document.getElementById('authBtn');
+  const errDiv = document.getElementById('authError');
+  const user   = document.getElementById('authUser').value.trim().toLowerCase();
+  const pass   = document.getElementById('authPass').value;
+  errDiv.textContent = '';
+  if (!user || !pass) { errDiv.textContent = 'Veuillez remplir tous les champs.'; return; }
+  btn.disabled = true;
+  btn.innerHTML = '<span class="auth-spinner"></span>Vérification…';
+  try {
+    const users   = await _fetchUsers();
+    const hashPwd = await _sha256(pass);
+    if (users[user] && users[user] === hashPwd) {
+      sessionStorage.setItem(_AUTH.SESSION_KEY, '1');
+      document.getElementById('authOverlay').classList.add('hidden');
+    } else {
+      errDiv.textContent = 'Identifiant ou mot de passe incorrect.';
+    }
+  } catch(e) {
+    errDiv.textContent = 'Erreur de connexion : ' + e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Connexion';
+  }
+};
+
+window.doLogout = function() {
+  sessionStorage.removeItem(_AUTH.SESSION_KEY);
+  const overlay = document.getElementById('authOverlay');
+  overlay.classList.remove('hidden');
+  document.getElementById('authUser').value = '';
+  document.getElementById('authPass').value = '';
+  document.getElementById('authError').textContent = '';
+};
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !document.getElementById('authOverlay').classList.contains('hidden')) {
+    doLogin();
+  }
+});
 </script>
 
 </body>
