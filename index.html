@@ -456,7 +456,7 @@ input[type=range]::-webkit-slider-thumb { appearance: none; width: 13px; height:
   display: flex; align-items: center; justify-content: center;
   font-family: var(--font-sans);
 }
-#authOverlay.hidden { display: none; }
+#authOverlay.hidden { display: none !important; }
 .auth-box {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 12px; padding: 44px 40px 36px; width: 340px;
@@ -501,6 +501,38 @@ input[type=range]::-webkit-slider-thumb { appearance: none; width: 13px; height:
 </style>
 </head>
 <body>
+
+<!-- Auth check inline — avant tout rendu -->
+<script>
+(function(){
+  // Si pas connecté, on garde l'overlay visible (il est dans le HTML ci-dessous)
+  // Si connecté, on le cache dès que le DOM est prêt
+  if(sessionStorage.getItem('mrkwtz_auth')==='1'){
+    document.addEventListener('DOMContentLoaded',function(){
+      var o=document.getElementById('authOverlay');
+      if(o) o.classList.add('hidden');
+    });
+  }
+})();
+</script>
+
+<div id="authOverlay">
+  <div class="auth-box">
+    <div class="auth-title">Optimiseur de Portefeuille</div>
+    <div class="auth-field">
+      <label for="authUser">Identifiant</label>
+      <input type="text" id="authUser" placeholder="Votre identifiant" autocomplete="username"/>
+    </div>
+    <div class="auth-field">
+      <label for="authPass">Mot de passe</label>
+      <input type="password" id="authPass" placeholder="••••••••" autocomplete="current-password"/>
+    </div>
+    <button class="auth-btn" id="authBtn" onclick="doLogin()">Connexion</button>
+    <div class="auth-error" id="authError"></div>
+    <hr class="auth-divider"/>
+    <div class="auth-note">Accès réservé aux utilisateurs autorisés.</div>
+  </div>
+</div>
 
 <div class="loading-overlay" id="loadingOverlay">
   <div class="spinner"></div>
@@ -650,7 +682,7 @@ input[type=range]::-webkit-slider-thumb { appearance: none; width: 13px; height:
       <button class="tab-btn" onclick="switchTab('cml',this)">CML interactive</button>
       <button class="tab-btn" onclick="switchTab('risk',this)">Niveaux de risque</button>
       <button class="contact-btn" onclick="openContact()">Contact</button>
-      <button class="logout-btn" onclick="sessionStorage.removeItem('mrkwtz_auth');location.reload();">↩ Déconnexion</button>
+      <button class="logout-btn" onclick="sessionStorage.clear();var o=document.getElementById('authOverlay');if(o){o.classList.remove('hidden');document.getElementById('authUser').value='';document.getElementById('authPass').value='';document.getElementById('authError').textContent='';}">↩ Déconnexion</button>
     </div>
     <div class="content">
 
@@ -1146,16 +1178,7 @@ const _AUTH = {
   USERS_PATH:  'users.json',
   SESSION_KEY: 'mrkwtz_auth'
 };
-
-// Afficher l'overlay au chargement si pas connecté
-(function() {
-  const overlay = document.getElementById('authOverlay');
-  if (sessionStorage.getItem(_AUTH.SESSION_KEY) !== '1') {
-    overlay.classList.remove('hidden');
-  } else {
-    overlay.classList.add('hidden');
-  }
-})();
+// (Le check de session est fait inline en haut du body)
 
 async function _sha256(str) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
